@@ -23,6 +23,7 @@ int main(void)
 
     //temperatures
     double dependent[8];
+    lin_reg lrArray[12];
 
 
 
@@ -39,6 +40,7 @@ int main(void)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[0]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -55,6 +57,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[1]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -71,6 +74,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[2]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -86,6 +90,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[3]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -101,6 +106,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[4]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -116,6 +122,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[5]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -131,6 +138,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[6]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -146,6 +154,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[7]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -161,6 +170,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[9]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -168,7 +178,7 @@ for(int dataset = 1; dataset <=5; dataset++)
 
 for(int dataset = 1; dataset <=5; dataset++)
     {
-        if(populatedataSept(independent, dependent, dataset))//populateDataSept
+        if(populatedataSep(independent, dependent, dataset))//populateDataSept
         {
             printf("Data Set %d\n-----------\n", dataset);
 
@@ -177,10 +187,29 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[8]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
     }
+
+for(int dataset = 1; dataset <=5; dataset++)
+    {
+        if(populatedataSep(independent, dependent, dataset))//populateDataSept
+        {
+            printf("Data Set %d\n-----------\n", dataset);
+
+            printdata(independent, dependent, 8);
+
+            lin_reg lr;
+
+            linear_regression(independent, dependent, 8, &lr);
+            lrArray[8]=lr;
+
+            printf("y = %gx + %g\n\n", lr.a, lr.b);
+        }
+    }
+
 for(int dataset = 1; dataset <=5; dataset++)
     {
         if(populatedataNov(independent, dependent, dataset))//populateDataNov
@@ -192,6 +221,7 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[10]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
@@ -208,18 +238,11 @@ for(int dataset = 1; dataset <=5; dataset++)
             lin_reg lr;
 
             linear_regression(independent, dependent, 8, &lr);
+            lrArray[12]=lr;
 
             printf("y = %gx + %g\n\n", lr.a, lr.b);
         }
     }
-
-
-
-
-
-
-
-
     return EXIT_SUCCESS;
 }
 
