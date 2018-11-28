@@ -1,4 +1,5 @@
 *
-!/linearregression/*
+!linearregression/
+!linearregression/**
 !README.md
 !.gitignore
