@@ -79,7 +79,7 @@ bool populatedataJan(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested. JAN");
             success = false;
             break;
     }
@@ -120,7 +120,7 @@ bool populatedataFeb(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, FEB");
             success = false;
             break;
     }
@@ -161,7 +161,7 @@ bool populatedataMar(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, MAR");
             success = false;
             break;
     }
@@ -202,7 +202,7 @@ bool populatedataApr(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, APR");
             success = false;
             break;
     }
@@ -243,7 +243,7 @@ bool populatedataMay(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, MAY");
             success = false;
             break;
     }
@@ -284,7 +284,7 @@ bool populatedataJun(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, JUN");
             success = false;
             break;
     }
@@ -325,7 +325,7 @@ bool populatedataJul(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, JUL");
             success = false;
             break;
     }
@@ -366,7 +366,7 @@ bool populatedataAug(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, AUG");
             success = false;
             break;
     }
@@ -375,7 +375,7 @@ bool populatedataAug(double independent[8], double dependent[8], int dataset)
 }
 
 //Septmeber data set
-bool populatedataSept(double independent[8], double dependent[8], int dataset)
+bool populatedataSep(double independent[8], double dependent[8], int dataset)
 {
     bool success = true;
 
@@ -407,7 +407,7 @@ bool populatedataSept(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, SEPT");
             success = false;
             break;
     }
@@ -448,7 +448,7 @@ bool populatedataOct(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, OCT");
             success = false;
             break;
     }
@@ -489,7 +489,7 @@ bool populatedataNov(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, NOV");
             success = false;
             break;
     }
@@ -530,7 +530,7 @@ bool populatedataDec(double independent[8], double dependent[8], int dataset)
             break;
 
         default:
-            puts("Invalid dataset requested");
+            puts("Invalid dataset requested, DEC");
             success = false;
             break;
     }
