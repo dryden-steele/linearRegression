@@ -1,7 +1,7 @@
-typedef struct weather_data {
+struct weather_data {
         int date;
-            int value;
-                char* name;
-} weather_data;
+        int value;
+        char* name;
+};
 
-weather_data* get_data_array(char* filename);
+struct weather_data* get_data_array(char* filename);

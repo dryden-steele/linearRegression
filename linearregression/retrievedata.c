@@ -7,7 +7,7 @@
 struct csvdata {
     long unsigned column;
     long unsigned row;
-    weather_data* data_points;
+    struct weather_data* data_points;
 };
 
 void cb1 (void* s, size_t len, void *data) {
@@ -21,7 +21,7 @@ void cb1 (void* s, size_t len, void *data) {
     }
     else if (local->column == 3) {
         local->data_points[local->row].value = atoi((char *)s);
-        printf("date: %d name: %s value: %d", local->data_points[local->row].date, local->data_points[local->row].name, local->data_points[local->row].value);
+        printf("date: %d name: %s value: %d\n", local->data_points[local->row].date, local->data_points[local->row].name, local->data_points[local->row].value);
     }
     
     local->column++;
@@ -34,14 +34,14 @@ void cb2 (int c, void *data) {
     local->row++;
 }
 
-weather_data* get_data_array(char* filename) {
+struct weather_data* get_data_array(char* filename) {
     FILE* fp;
     struct csv_parser p;
     char buff[1024];
     size_t bytes_read;
-    struct csvdata d = {0, 0, malloc(sizeof(weather_data))};
+    struct csvdata d = {0, 0, malloc(sizeof(struct weather_data) * 2270)};
 
-    if (csv_init(&p, 0) != 0) {
+    if (csv_init(&p, CSV_APPEND_NULL) != 0) {
         fprintf(stderr, "Failed to init csv parser\n");
         exit(EXIT_FAILURE);
     }
@@ -71,7 +71,10 @@ weather_data* get_data_array(char* filename) {
     return d.data_points;
 }
 
-int main() {
-    get_data_array("2014.csv");
+int main(int argc, char** argv) {
+    struct weather_data* data = get_data_array("2014.csv");
+
+    printf("testing retrieval date: %d\n", data[0].date);
+
     return 0;
 }
