@@ -4,4 +4,4 @@ struct weather_data {
         char* name;
 };
 
-struct weather_data* get_data_array(char* filename);
+struct weather_data* get_data_array(char* filename, int record_count);
