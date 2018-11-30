@@ -19,32 +19,27 @@ double predictTemp(double* coefficients,double f);
 int main()
 {
     // Will need to change how we get data, this is just dummy data ya dummy
-    double xA[]={0,1,2,3,4,5,6,7,8,9,10};
-    double yA[]={1,6,17,34,57,86,121,162,209,262,321};
-    double* x=xA;
-    double* y=yA;
-    //printf("%lu\n",NUM_OF(xA));
-
+    double x[]={0,1,2,3,4,5,6,7,8,9,10};
+    double y[]={1,6,17,34,57,86,121,162,209,262,321};
 
     // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
     double c[ORDER];
-    double* coefficients=c;
     
     // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
     // return 0 -> we good
     // return -1 -> no good
-    int result=polyfit(x,y,ELEMENT_COUNT,ORDER,coefficients);
+    int result=polyfit(x,y,NUM_OF(x),ORDER,c);
     if (result==-1)
     {
         printf("OwO whoopsie\n");
         return EXIT_FAILURE;
     }
 
-    print_equation(coefficients);
+    print_equation(c);
     // args - coefficients array and the X value it will use
     // X value will be the "day" we are predicting for
     // Will most likely need to add another arg for month
-    double prediction = predictTemp(coefficients,2);
+    double prediction = predictTemp(c,2);
 
     printf("%f\n",prediction);
 
