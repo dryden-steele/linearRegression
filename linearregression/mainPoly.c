@@ -1,5 +1,7 @@
 #include <math.h>
 #include "polyfit.h"
+// Get length of array, does not work if x is a pointer grrrrrr
+#define NUM_OF(x) (sizeof(x)/sizeof(*x))
 
 // Number of points
 // Will probably not be a constant (considering the days in months vary)
@@ -21,6 +23,7 @@ int main()
     double yA[]={1,6,17,34,57,86,121,162,209,262,321};
     double* x=xA;
     double* y=yA;
+    //printf("%lu\n",NUM_OF(xA));
 
 
     // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
