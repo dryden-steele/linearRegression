@@ -1,4 +1,3 @@
-#include <string.h>
 #include <math.h>
 #include "polyfit.h"
 
@@ -18,9 +17,10 @@ int main()
     double c[ORDER];
     double* coefficients=c;
     int result=polyfit(x,y,ELEMENT_COUNT,ORDER,coefficients);
+    // could not generate a polynomial
     if (result==-1)
     {
-        printf("ERROR\n");
+        printf("OwO whoopsie\n");
         return EXIT_FAILURE;
     }
     print_equation(coefficients);
