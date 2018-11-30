@@ -70,11 +70,3 @@ struct weather_data* get_data_array(char* filename, int record_count) {
 
     return d.data_points;
 }
-
-int main(int argc, char** argv) {
-    struct weather_data* data = get_data_array("2014.csv", 2270);
-
-    printf("testing retrieval date: %d\n", data[0].date);
-
-    return 0;
-}
