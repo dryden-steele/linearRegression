@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "retrievedata.h"
-#include "lib/libcsv/csv.h"
+#include "csv.h"
 
 struct csvdata {
     long unsigned column;
