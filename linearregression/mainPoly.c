@@ -4,8 +4,6 @@
 #include "polyfit.h"
 #include "retrievedata.h"
 #include "data.h"
-// Get length of array, does not work if x is a pointer grrrrrr
-#define NUM_OF(x) (sizeof(x)/sizeof(*x))
 
 // Number of points
 // Will probably not be a constant (considering the days in months vary)
@@ -74,7 +72,7 @@ int main()
     //prints all data points 
     //for (int i=0;i<temp_max+temp_min;i++)
     //{
-    //    printf("(%.2f, %.2f)\n",t_y[i],t_x[i]);
+    //    printf("(%.3f, %.3f)\n",t_y[i],t_x[i]);
     //}
 
 
@@ -84,7 +82,7 @@ int main()
     // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
     // return 0 -> we good
     // return -1 -> no good
-    int result=polyfit(t_x,t_y,100,ORDER,c);
+    int result=polyfit(t_x,t_y,temp_max+temp_min,ORDER,c);
     if (result==-1)
     {
         printf("OwO whoopsie\n");
@@ -95,8 +93,8 @@ int main()
     // args - coefficients array and the X value it will use
     // X value will be the "day" we are predicting for
     // Will most likely need to add another arg for month
-    //double prediction = predictTemp(c,100);
-    //printf("%f",prediction);
+    double prediction = predictTemp(c,100);
+    printf("%f\n",prediction);
 
     return 0;
 }
