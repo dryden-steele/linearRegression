@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <mpi.h>
 #include "polyfit.h"
 #include "retrievedata.h"
 #include "data.h"
@@ -20,7 +21,7 @@ double predictTemp(double* coefficients,double f);
 
 int main()
 {
-
+    float starttime=MPI_Wtime();
     struct weather_data* weather_array[CSV_NUM];
     
     for (int i=0;i<CSV_NUM;i++)
@@ -95,6 +96,8 @@ int main()
     // Will most likely need to add another arg for month
     double prediction = predictTemp(c,100);
     printf("%f\n",prediction);
+    float endtime=MPI_Wtime()-starttime;
+    printf("%f\n",endtime);
 
     return 0;
 }
