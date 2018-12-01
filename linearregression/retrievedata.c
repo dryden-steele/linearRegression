@@ -21,7 +21,7 @@ void cb1 (void* s, size_t len, void *data) {
     }
     else if (local->column == 3) {
         local->data_points[local->row].value = atoi((char *)s);
-        printf("date: %d name: %s value: %d\n", local->data_points[local->row].date, local->data_points[local->row].name, local->data_points[local->row].value);
+        //printf("date: %d name: %s value: %d\n", local->data_points[local->row].date, local->data_points[local->row].name, local->data_points[local->row].value);
     }
     
     local->column++;
