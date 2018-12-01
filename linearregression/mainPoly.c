@@ -21,6 +21,7 @@ double predictTemp(double* coefficients,double f);
 
 int main()
 {
+    char* csvfiles
     fflush(stdout);
     struct weather_data* a=get_data_array("2015.csv",2290);
     printf("%s",a[0].name);
