@@ -1,18 +1,86 @@
-
-//--------------------------------------------------------
-// FUNCTION PROTOTYPES
-//--------------------------------------------------------
-bool populatedata(double independent[8], double dependent[8], int dataset);
-bool populatedataJan(double independent[8], double dependent[8], int dataset);
-bool populatedataFeb(double independent[8], double dependent[8], int dataset);
-bool populatedataMar(double independent[8], double dependent[8], int dataset);
-bool populatedataApr(double independent[8], double dependent[8], int dataset);
-bool populatedataMay(double independent[8], double dependent[8], int dataset);
-bool populatedataJun(double independent[8], double dependent[8], int dataset);
-bool populatedataJul(double independent[8], double dependent[8], int dataset);
-bool populatedataAug(double independent[8], double dependent[8], int dataset);
-bool populatedataOct(double independent[8], double dependent[8], int dataset);
-bool populatedataSep(double independent[8], double dependent[8], int dataset);
-bool populatedataNov(double independent[8], double dependent[8], int dataset);
-bool populatedataDec(double independent[8], double dependent[8], int dataset);
-
+char* csv_files[]={
+    "csv/1978.csv",
+    "csv/1979.csv",
+    "csv/1980.csv",
+    "csv/1981.csv",
+    "csv/1982.csv",
+    "csv/1983.csv",
+    "csv/1984.csv",
+    "csv/1985.csv",
+    "csv/1986.csv",
+    "csv/1987.csv",
+    "csv/1988.csv",
+    "csv/1989.csv",
+    "csv/1990.csv",
+    "csv/1991.csv",
+    "csv/1992.csv",
+    "csv/1993.csv",
+    "csv/1994.csv",
+    "csv/1995.csv",
+    "csv/1996.csv",
+    "csv/1997.csv",
+    "csv/1998.csv",
+    "csv/1999.csv",
+    "csv/2000.csv",
+    "csv/2001.csv",
+    "csv/2002.csv",
+    "csv/2003.csv",
+    "csv/2004.csv",
+    "csv/2005.csv",
+    "csv/2006.csv",
+    "csv/2007.csv",
+    "csv/2008.csv",
+    "csv/2009.csv",
+    "csv/2010.csv",
+    "csv/2011.csv",
+    "csv/2012.csv",
+    "csv/2013.csv",
+    "csv/2014.csv",
+    "csv/2015.csv",
+    "csv/2016.csv",
+    "csv/2017.csv",
+    "csv/2018.csv",
+};
+int csv_lines[]={
+    2209,
+    2203,
+    2211,
+    2211,
+    2222,
+    2183,
+    2240,
+    2240,
+    2244,
+    2215,
+    2219,
+    2068,
+    2252,
+    2249,
+    2246,
+    2241,
+    2223,
+    2212,
+    2228,
+    2220,
+    2204,
+    2216,
+    2227,
+    2229,
+    2204,
+    1311,
+    2188,
+    2008,
+    1977,
+    2024,
+    2259,
+    2244,
+    2255,
+    2247,
+    2276,
+    2253,
+    2270,
+    2290,
+    2289,
+    2288,
+    2052
+};
