@@ -2,6 +2,7 @@
 #include <string.h>
 #include <math.h>
 #include <mpi.h>
+#include <omp.h>
 #include "polyfit.h"
 #include "retrievedata.h"
 #include "data.h"
@@ -19,40 +20,92 @@ const int CSV_NUM=41;
 void print_equation(double *coefficients);
 double predictTemp(double* coefficients,double f);
 
-int main()
+int main(int argc, char* argv[])
 {
+    int n;
+    int rank;
+    int local_csv_num;
+    int local_n;
+    int* data_sizes;
+    int* data_displacements;
+    long int *temp_maxes;
+    long int *temp_mins;
+    long int* local_temp_maxes;
+    long int* local_temp_mins;
+    double* t_x;
+    double* t_y;
+    double* local_t_x;
+    double* local_t_y;
+    long long int temp_max=0;
+    long long int temp_min=0;
+
+    omp_set_num_threads(atoi(argv[1]));
+    MPI_Init(&argc,&argv);
+    MPI_Comm_size (MPI_COMM_WORLD, &n);
+    MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+
     float starttime=MPI_Wtime();
+    struct weather_data* local_weather_array;
     struct weather_data* weather_array[CSV_NUM];
     
-    for (int i=0;i<CSV_NUM;i++)
-    {
-        weather_array[i]=get_data_array(csv_files[i],csv_lines[i]);
-    }
-    
-    int temp_max=0;
-    int temp_min=0;
-    for (int i=0;i<CSV_NUM;i++)
-    {
-        struct weather_data *tmp=weather_array[i];
-        for (int j=0;j<csv_lines[i];j++)
+    if (rank == 0) {
+        for (int i=0;i<CSV_NUM;i++)
         {
-            if (strcmp(tmp[j].name,"TMAX")==0)
-                temp_max++;
-            if (strcmp(tmp[j].name,"TMIN")==0)
-                temp_min++;
+            weather_array[i]=get_data_array(csv_files[i],csv_lines[i]);
+        }
+        
+        *temp_maxes = (long int*) malloc(sizeof(long int) * CSV_NUM);
+        *temp_mins = (long int*) malloc(sizeof(long int) * CSV_NUM);
+        for (int i=0;i<CSV_NUM;i++) {
+            temp_maxes[i] = 0;
+            temp_mins[i] = 0;
+        }
+
+        #pragma omp parallel for
+        for (int i=0;i<CSV_NUM;i++)
+        {
+            struct weather_data *tmp=weather_array[i];
+            for (long int j=0;j<csv_lines[i];j++)
+            {
+                if (strcmp(tmp[j].name,"TMAX")==0)
+                    temp_maxes[i]++;
+                if (strcmp(tmp[j].name,"TMIN")==0)
+                    temp_mins[i]++;
+            }
+        }
+
+        for (int i=0;i<CSV_NUM; i++) {
+            temp_max += temp_maxes[i];
+            temp_min += temp_mins[i];
+        }
+
+        printf("temp_max = %ld\ttemp_min = %ld\nsum = %ld\n", temp_max, temp_min, temp_max + temp_min);
+        t_x = (double*) malloc(sizeof(double) * (temp_max + temp_min));
+        if (t_x == NULL) {
+            printf("Not enough memory for x\n");
+            return 1;
+        }
+        t_y = (double*) malloc(sizeof(double) * (temp_max + temp_min));
+        if (t_y == NULL) {
+            printf("Not enough memory for y\n");
+            return 1;
         }
     }
 
-    double* t_x = malloc(sizeof(long int) * (temp_max + temp_min));
-    double* t_y = malloc(sizeof(long int) * (temp_max + temp_min));
 
-    int count_x = 0;
-    for (int k=0;k<CSV_NUM;k++)
+    // calculate sizes and displacements for following data
+
+    // scatter weather array
+    // scatter temp maxes
+    // scatter temp mins
+
+    long long int count_x = 0;
+    for (long int k=0;k<CSV_NUM;k++)
     {
-        int count_max = 0;
-        int count_min = 0;
+        long long int count_max = 0;
+        long long int count_min = 0;
         struct weather_data *tmp=weather_array[k];
-        for (int i=0;i<csv_lines[k];i++)
+        for (long long int i=0;i<csv_lines[k];i++)
         {
             if (strcmp(tmp[i].name,"TMAX") == 0)
             {
@@ -70,13 +123,15 @@ int main()
             }
         }
     }
+
+    // gather local t x
+    // gather local t y
+
     //prints all data points 
     //for (int i=0;i<temp_max+temp_min;i++)
     //{
     //    printf("(%.3f, %.3f)\n",t_y[i],t_x[i]);
     //}
-
-
 
     // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
     double c[ORDER];
@@ -100,7 +155,7 @@ int main()
     float endtime=MPI_Wtime()-starttime;
     printf("Mid time:%f\n",midtime);
     printf("End time:%f\n",endtime);
-
+    MPI_Finalize();
     return 0;
 }
 
