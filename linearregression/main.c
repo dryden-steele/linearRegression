@@ -83,6 +83,7 @@ int main()
     // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
     // return 0 -> we good
     // return -1 -> no good
+    float midtime=MPI_Wtime()-starttime;
     int result=polyfit(t_x,t_y,temp_max+temp_min,ORDER,c);
     if (result==-1)
     {
@@ -97,7 +98,8 @@ int main()
     double prediction = predictTemp(c,100);
     printf("%f\n",prediction);
     float endtime=MPI_Wtime()-starttime;
-    printf("%f\n",endtime);
+    printf("Mid time:%f\n",midtime);
+    printf("End time:%f\n",endtime);
 
     return 0;
 }
