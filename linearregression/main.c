@@ -44,20 +44,38 @@ int main(int argc, char* argv[])
     long int local_temp_max=0;
     long int local_temp_min=0;
 
+    MPI_Datatype mpi_weather_data;
+    int blocklens[3];
+    MPI_Aint indices[3];
+    MPI_Datatype old_types[3];
+
     omp_set_num_threads(atoi(argv[1]));
     MPI_Init(&argc,&argv);
     MPI_Comm_size (MPI_COMM_WORLD, &num_processes);
     MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 
     float starttime=MPI_Wtime();
-    struct weather_data* local_weather_array;
+    struct weather_data** local_weather_array;
     struct weather_data* weather_array[CSV_NUM];
     
+    // Build mpi_weather_data datatype
+    blocklens[0] = 1;
+    blocklens[1] = 1;
+    blocklens[2] = 8;
+    old_types[0] = MPI_INT;
+    old_types[1] = MPI_INT;
+    old_types[2] = MPI_CHAR;
+    indices[0] = 0;
+    indices[1] = sizeof(int);
+    indices[2] = sizeof(int) * 2;
+    MPI_Type_struct(3, blocklens, indices, old_types, &mpi_weather_data);
+    MPI_Type_commit(&mpi_weather_data);
+
     // calculate sizes and displacements for following data
     data_sizes = malloc(sizeof(int) * num_processes);
     data_displacements = malloc(sizeof(int) * num_processes);
 
-    printf("CSV_NUM = %d on processes with rank %d\n");
+    printf("CSV_NUM = %d on processes with rank %d\n", CSV_NUM, rank);
     local_size = CSV_NUM / num_processes;
     int remainder = CSV_NUM % num_processes;
 
@@ -144,13 +162,28 @@ int main(int argc, char* argv[])
     }
 
     // Build receiving arrays
-    local_weather_array = malloc(sizeof(struct weather_data) * data_sizes[rank]);
+    local_weather_array = malloc(sizeof(struct weather_data*) * data_sizes[rank]);
     //local_temp_maxes = malloc(sizeof(long int) * data_sizes[rank]);
     //local_temp_mins = malloc(sizeof(long int) * data_sizes[rank]);
     local_csv_lines = malloc(sizeof(int) * data_sizes[rank]);
 
+    if (rank == 0) {
+        for (int i = 1; i < num_processes; i++) {
+            for (int j = 0; j < data_sizes[rank]; i++) {
+                long int index = j + data_displacements[i];
+                MPI_Send(weather_array[index], csv_lines[index], );
+            }
+        }
+    }
+    else {
+        for (int i = 0; i < data_sizes[rank]; i++) {
+            MPI_Recv();
+            //Send each weather array one by one to each other process from processes 0 and have them receive it on their end in the appropriate spot
+        }
+    }
+
     // scatter weather array
-    MPI_Scatterv(&weather_array, data_sizes, data_displacements, mpi_weather_data, &local_weather_array, data_sizes[rank], mpi_weather_data, 0, MPI_COMM_WORLD);
+    //MPI_Scatterv(weather_array, data_sizes, data_displacements, mpi_weather_data, local_weather_array, data_sizes[rank], mpi_weather_data, 0, MPI_COMM_WORLD);
 
     // scatter temp maxes
     //MPI_Scatterv(&temp_maxes, data_sizes, data_displacements, MPI_LONG, &local_temp_maxes, data_sizes[rank], MPI_LONG, 0, MPI_COMM_WORLD);
@@ -159,10 +192,10 @@ int main(int argc, char* argv[])
     //MPI_Scatterv(&temp_mins, data_sizes, data_displacements, MPI_LONG, &local_temp_mins, data_sizes[rank], MPI_LONG, 0, MPI_COMM_WORLD);
 
     // scatter output array sizes
-    MPI_Scatter(&data_output_array_sizes, 1, MPI_INT, &local_output_array_size, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(data_output_array_sizes, 1, MPI_INT, &local_output_array_size, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     // scatter csv lines
-    MPI_Scatterv(&csv_lines, data_sizes, data_displacements, MPI_INT, &local_csv_lines, data_sizes[rank], MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(csv_lines, data_sizes, data_displacements, MPI_INT, local_csv_lines, data_sizes[rank], MPI_INT, 0, MPI_COMM_WORLD);
 
     local_t_x = malloc(sizeof(double) * local_output_array_size);
     local_t_y = malloc(sizeof(double) * local_output_array_size);
@@ -172,7 +205,7 @@ int main(int argc, char* argv[])
     {
         long long int count_max = 0;
         long long int count_min = 0;
-        struct weather_data *tmp = local_weather_array[k];
+        struct weather_data* tmp = local_weather_array[k];
         for (long long int i=0;i<local_csv_lines[k];i++)
         {
             if (strcmp(tmp[i].name,"TMAX") == 0)
@@ -193,10 +226,10 @@ int main(int argc, char* argv[])
     }
 
     // gather local t x
-    MPI_Gatherv(&local_t_x, local_output_array_size, MPI_DOUBLE, &t_x, data_output_array_sizes, data_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gatherv(local_t_x, local_output_array_size, MPI_DOUBLE, t_x, data_output_array_sizes, data_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // gather local t y
-    MPI_Gatherv(&local_t_y, local_output_array_size, MPI_DOUBLE, &t_y, data_output_array_sizes, data_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gatherv(local_t_y, local_output_array_size, MPI_DOUBLE, t_y, data_output_array_sizes, data_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // Do prediction
     if (rank == 0) {
@@ -227,9 +260,9 @@ int main(int argc, char* argv[])
         printf("%f\n",prediction);
     }
 
-    float endtime=MPI_Wtime()-starttime;
-    printf("Mid time:%f\n",midtime);
-    printf("End time:%f\n",endtime);
+    //float endtime=MPI_Wtime()-starttime;
+    //printf("Mid time:%f\n",midtime);
+    //printf("End time:%f\n",endtime);
     MPI_Finalize();
     return 0;
 }
