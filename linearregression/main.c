@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
     MPI_Comm_size (MPI_COMM_WORLD, &num_processes);
     MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 
-    float starttime=MPI_Wtime();
+    double starttime = MPI_Wtime();
     struct weather_data** local_weather_array;
 
     data_sizes = malloc(sizeof(int) * num_processes);
@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
     }
 
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
     
     local_weather_array = malloc(sizeof(struct weather_data*) * data_sizes[rank]);
@@ -280,8 +280,8 @@ int main(int argc, char* argv[])
     fflush(stdout);
 
 
-    printf("PROCESS %d HAS REACHED THE FINAL BARRIER\n", rank);
-    fflush(stdout);
+    //printf("PROCESS %d HAS REACHED THE FINAL BARRIER\n", rank);
+    //fflush(stdout);
     //MPI_Barrier(MPI_COMM_WORLD);
 
 
@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
     // retrieve size of arrays from each rank
     printf("PROCESS %d: SENDING OUTPUT ARRAY SIZE %d AND NUM_PROCESSES %d\n", rank, local_output_array_size, num_processes);
     fflush(stdout);
-    MPI_Gather(&local_output_array_size, 1, MPI_LONG, local_output_array_sizes, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+    MPI_Gather(&local_output_array_size, 1, MPI_INT, local_output_array_sizes, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
         for (int i = 0; i < num_processes; i++) {
@@ -356,7 +356,7 @@ int main(int argc, char* argv[])
 
 
     printf("MPI COMMUNICATION COMPLETE ON PROCESS %d\n", rank);
-    //MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
 
 
     if (rank == 0) {
@@ -365,7 +365,7 @@ int main(int argc, char* argv[])
         // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
         // return 0 -> we good
         // return -1 -> no good
-        float midtime = MPI_Wtime()-starttime;
+        double midtime = MPI_Wtime() - starttime;
         int result = polyfit(t_x, t_y, output_array_size, ORDER, c);
         if (result == -1)
         {
@@ -381,7 +381,7 @@ int main(int argc, char* argv[])
         double prediction = predictTemp(c,100);
         printf("%f\n", prediction);
 
-        float endtime=MPI_Wtime()-starttime;
+        double endtime = MPI_Wtime() - starttime;
         printf("Mid time:%f\n",midtime);
         printf("End time:%f\n",endtime);
     }
