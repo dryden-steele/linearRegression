@@ -14,7 +14,7 @@
 
 // Order of polynomial; ie. highest degree of x
 // Will probably tweak this somehow to get more accurate without destrying our efficency
-const int ORDER=5;
+const int ORDER=10;
 const int CSV_NUM=41;
 // Prototype declarations boi
 void print_equation(double *coefficients);
@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
 
     if (rank == 0) {
         // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
-        double c[ORDER];
+        double c[ORDER+1];
         // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
         // return 0 -> we good
         // return -1 -> no good
@@ -374,18 +374,22 @@ int main(int argc, char* argv[])
             printf("OwO whoopsie\n");
             return EXIT_FAILURE;
         }
-
+        long int e=sizeof(c)/sizeof(*c);
+        for (int i=0;i<e;++i)
+        {
+            printf("%f\n",c[i]);
+        }
+        printf("\n");
         print_equation(c);
 
         // args - coefficients array and the X value it will use
         // X value will be the "day" we are predicting for
         // Will most likely need to add another arg for month
-        double prediction = predictTemp(c,100);
-        printf("%f\n", prediction);
-
-        double endtime = MPI_Wtime();
-        printf("Mid time taken:%f\n", midtime - starttime);
-        printf("End time taken:%f\n", endtime - midtime);
+        double prediction = predictTemp(c,200); 
+        printf("%f\n", prediction); 
+        double endtime = MPI_Wtime(); 
+        printf("Mid time taken:%f\n", midtime - starttime); 
+        printf("End time taken:%f\n", endtime - midtime); 
         printf("Total time taken:%f\n", endtime - starttime);
     }
     MPI_Finalize();
@@ -411,11 +415,11 @@ double predictTemp(double *coefficients,double x_point)
 // Prints out the polynomial in human readable form
 void print_equation(double *coefficients)
 {
-    for (int i=0;i<ORDER;i++)
+    for (int i=0;i<ORDER+1;i++)
     {
-        if (i!=ORDER-1)
-            printf("%.2fx^%d + ",coefficients[ORDER-i-1],ORDER-i-1);
+        if (i!=ORDER)
+            printf("%fx^%d + ",coefficients[ORDER-i],ORDER-i);
         else
-            printf("%.2f\n",coefficients[ORDER-i-1]);
+            printf("%f\n",coefficients[ORDER-i]);
     }
 }

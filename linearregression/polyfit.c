@@ -1,7 +1,7 @@
 #include "polyfit.h"
 
 // Max order of polynomial, will be used to find a balance between accuracy and efficency
-enum {MAX_ORDER = 5};
+enum {MAX_ORDER = 10};
 int polyfit(const double* const dependentValues,
             const double* const independentValues,
             unsigned int countOfElements,
