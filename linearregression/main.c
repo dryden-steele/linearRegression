@@ -22,110 +22,319 @@ double predictTemp(double* coefficients,double f);
 
 int main(int argc, char* argv[])
 {
-    int n;
+    int num_processes;
     int rank;
-    int local_csv_num;
-    int local_n;
+    int local_size;
+    int remainder;
     int* data_sizes;
     int* data_displacements;
-    long int *temp_maxes;
-    long int *temp_mins;
+    int* local_csv_lines;
+    char** local_csv_files;
+    long int local_output_array_size = 0;
+    long int output_array_size;
+    long int* local_output_array_sizes;
+    long int* local_output_array_displacements;
     long int* local_temp_maxes;
     long int* local_temp_mins;
+    long long int local_temp_max;
+    long long int local_temp_min;
     double* t_x;
     double* t_y;
     double* local_t_x;
     double* local_t_y;
-    long long int temp_max=0;
-    long long int temp_min=0;
+
+    if (argc < 2) {
+        printf("USAGE: mpiexec -n <n> linearprog <thread_num>\n");
+        return 0;
+    }
 
     omp_set_num_threads(atoi(argv[1]));
     MPI_Init(&argc,&argv);
-    MPI_Comm_size (MPI_COMM_WORLD, &n);
+    MPI_Comm_size (MPI_COMM_WORLD, &num_processes);
     MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 
     float starttime=MPI_Wtime();
-    struct weather_data* local_weather_array;
-    struct weather_data* weather_array[CSV_NUM];
-    
-    if (rank == 0) {
-        for (int i=0;i<CSV_NUM;i++)
-        {
-            weather_array[i]=get_data_array(csv_files[i],csv_lines[i]);
+    struct weather_data** local_weather_array;
+
+    data_sizes = malloc(sizeof(int) * num_processes);
+    data_displacements = malloc(sizeof(int) * num_processes);
+
+    local_size = CSV_NUM / num_processes;
+    remainder = CSV_NUM % num_processes;
+
+    // Build size and displacement arrays
+    for (int i = 0; i < num_processes; i++) {
+        // Start with base size
+        data_sizes[i] = local_size;
+
+        // Account for first displacement
+        if (i == 0) {
+            data_displacements[i] = 0;
         }
-        
-        *temp_maxes = (long int*) malloc(sizeof(long int) * CSV_NUM);
-        *temp_mins = (long int*) malloc(sizeof(long int) * CSV_NUM);
-        for (int i=0;i<CSV_NUM;i++) {
-            temp_maxes[i] = 0;
-            temp_mins[i] = 0;
+        else {
+            data_displacements[i] = data_displacements[i - 1] + data_sizes[i - 1];
         }
 
-        #pragma omp parallel for
-        for (int i=0;i<CSV_NUM;i++)
-        {
-            struct weather_data *tmp=weather_array[i];
-            for (long int j=0;j<csv_lines[i];j++)
-            {
-                if (strcmp(tmp[j].name,"TMAX")==0)
-                    temp_maxes[i]++;
-                if (strcmp(tmp[j].name,"TMIN")==0)
-                    temp_mins[i]++;
-            }
-        }
-
-        for (int i=0;i<CSV_NUM; i++) {
-            temp_max += temp_maxes[i];
-            temp_min += temp_mins[i];
-        }
-
-        printf("temp_max = %ld\ttemp_min = %ld\nsum = %ld\n", temp_max, temp_min, temp_max + temp_min);
-        t_x = (double*) malloc(sizeof(double) * (temp_max + temp_min));
-        if (t_x == NULL) {
-            printf("Not enough memory for x\n");
-            return 1;
-        }
-        t_y = (double*) malloc(sizeof(double) * (temp_max + temp_min));
-        if (t_y == NULL) {
-            printf("Not enough memory for y\n");
-            return 1;
+        // Add remainder until it is all accounted for
+        if (remainder > 0) {
+            data_sizes[i]++;
+            remainder--;
         }
     }
 
+    // Distribute input filenames and their line sizes
+    if (rank == 0) {
+        printf("START SENDING FILENAMES AND FILE SIZES\n");
+        fflush(stdout);
+
+        for(int i = 1; i < num_processes; i++) {
+            for(int j = 0; j < data_sizes[i]; j++) {
+                int index = j + data_displacements[i];
+
+                // Send filename
+                printf("Sending filename \"%s\" to process %d from process %d\n", csv_files[index], i, rank);
+                fflush(stdout);
+                MPI_Send(&csv_files[index], strlen(csv_files[index]), MPI_CHAR, i, 0, MPI_COMM_WORLD);
+
+                // Send file size
+                printf("Sending file length %d to process %d from process %d\n", csv_lines[index], i, rank);
+                fflush(stdout);
+                MPI_Send(&csv_lines[index], 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            }
+        }
+
+        printf("END SENDING FILENAMES AND FILE SIZES\n");
+        fflush(stdout);
+
+        local_csv_files = malloc(sizeof(char*) * data_sizes[rank]);
+        local_csv_lines = malloc(sizeof(int) * data_sizes[rank]);
+        
+        printf("START SETTING FILENAMES AND FILE SIZES ON PROCESSES %d\n", rank);
+        fflush(stdout);
+       
+        for (int i = 0; i < data_sizes[0]; i++) {
+            local_csv_files[i] = strdup(csv_files[i]);
+            printf("Process %d placed filename \"%s\" for index %d\n", rank, local_csv_files[i], i);
+
+            local_csv_lines[i] = csv_lines[i];
+            printf("Process %d placed file length %d for index %d\n", rank, local_csv_lines[i], i);
+        }
+
+        printf("END SETTING FILENAMES AND FILE SIZES ON PROCESSES %d\n", rank);
+        fflush(stdout);
+    }
+    else {
+        local_csv_files = malloc(sizeof(char*) * data_sizes[rank]);
+        local_csv_lines = malloc(sizeof(int) * data_sizes[rank]);
+
+        printf("START RECEIVEING FILENAME AND FILE SIZE ON PROCESS %d\n", rank);
+        fflush(stdout);
+
+        for (int i = 0; i < data_sizes[rank]; i++) {
+            local_csv_files[i] = malloc(sizeof(char) * 16);
+
+            // Receive filename
+            MPI_Recv(&local_csv_files[i], 16, MPI_CHAR, 0, 0, MPI_COMM_WORLD, NULL);
+            printf("Process %d received filename \"%s\" for index %d\n", rank, local_csv_files[i], i);
+            fflush(stdout);
+
+            // Receive file size
+            MPI_Recv(&local_csv_lines[i], 1, MPI_INT, 0, 0, MPI_COMM_WORLD, NULL);
+            printf("Process %d received file length %d for index %d\n", rank, local_csv_lines[i], i);
+            fflush(stdout);
+        }
+
+        printf("END RECEIVEING FILENAME AND FILE SIZE ON PROCESS %d\n", rank);
+        fflush(stdout);
+    }
+
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    
+    local_weather_array = malloc(sizeof(struct weather_data*) * data_sizes[rank]);
+
+    printf("START GETTING WEATHER DATA FOR FILES ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+    for (int i = 0; i < data_sizes[rank]; i++)
+    {
+        printf("GETTING WEATHER DATA FOR FILE %s (LENGTH %d) ON PROCESS %d AT INDEX %d\n", local_csv_files[i], local_csv_lines[i], rank, i);
+        fflush(stdout);
+        local_weather_array[i] = get_data_array(local_csv_files[i], local_csv_lines[i]);
+    }
+    
+    printf("END GETTING WEATHER DATA FOR FILES ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+
+    printf("START INITIALIZING OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+    local_temp_maxes = (long int*) malloc(sizeof(long int) * data_sizes[rank]);
+    local_temp_mins = (long int*) malloc(sizeof(long int) * data_sizes[rank]);
+    for (int i = 0; i < data_sizes[rank]; i++) {
+        local_temp_maxes[i] = 0;
+        local_temp_mins[i] = 0;
+    }
+
+    printf("END INITIALIZING OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+
+    printf("START COUNTING NUMBER OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+    #pragma omp parallel for
+    for (int i = 0; i < data_sizes[rank]; i++)
+    {
+        struct weather_data *tmp = local_weather_array[i];
+        for (long int j = 0; j < local_csv_lines[i]; j++)
+        {
+            if (strcmp(tmp[j].name,"TMAX")==0)
+                local_temp_maxes[i]++;
+            if (strcmp(tmp[j].name,"TMIN")==0)
+                local_temp_mins[i]++;
+        }
+    }
+
+    printf("END COUNTING NUMBER OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+
+    printf("START ADDING NUMBER OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+    local_temp_max = 0;
+    local_temp_min = 0;
+    for (int i = 0; i < data_sizes[rank]; i++) {
+        local_temp_max += local_temp_maxes[i];
+        local_temp_min += local_temp_mins[i];
+    }
+    
+    local_output_array_size = local_temp_max + local_temp_min;
+
+    printf("END ADDING NUMBER OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+    printf("PROCESS %d local_temp_max = %lld\tlocal_temp_min = %lld\nlocal sum = %ld\n", rank, local_temp_max, local_temp_min, local_output_array_size);
+    fflush(stdout);
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    local_t_x = (double*) malloc(sizeof(double) * (local_output_array_size));
+    if (local_t_x == NULL) {
+        printf("Not enough memory for x\n");
+        fflush(stdout);
+        return 1;
+    }
+    local_t_y = (double*) malloc(sizeof(double) * (local_output_array_size));
+    if (local_t_y == NULL) {
+        printf("Not enough memory for y\n");
+        fflush(stdout);
+        return 1;
+    }
 
     // calculate sizes and displacements for following data
 
-    // scatter weather array
-    // scatter temp maxes
-    // scatter temp mins
+    printf("START BUILDING LOCAL TX AND TY ARRAYS ON PROCESS %d\n", rank);
+    fflush(stdout);
 
-    long long int count_x = 0;
-    for (long int k=0;k<CSV_NUM;k++)
+    long long int local_count_x = 0;
+    for (long int k = 0; k < data_sizes[rank]; k++)
     {
         long long int count_max = 0;
         long long int count_min = 0;
-        struct weather_data *tmp=weather_array[k];
-        for (long long int i=0;i<csv_lines[k];i++)
+        struct weather_data *tmp = local_weather_array[k];
+        for (long long int i = 0; i < local_csv_lines[k]; i++)
         {
             if (strcmp(tmp[i].name,"TMAX") == 0)
             {
-                t_x[count_x] = (double)count_max;
-                t_y[count_x] = (double)tmp[i].value;
+                local_t_x[local_count_x] = (double)count_max;
+                local_t_y[local_count_x] = (double)tmp[i].value;
                 count_max++;
-                count_x++;
+                local_count_x++;
             }
             else if (strcmp(tmp[i].name,"TMIN") == 0)
             {
-                t_x[count_x] = (double)count_min;
-                t_y[count_x] = (double)tmp[i].value;
+                local_t_x[local_count_x] = (double)count_min;
+                local_t_y[local_count_x] = (double)tmp[i].value;
                 count_min++;
-                count_x++;
+                local_count_x++;
             }
         }
     }
 
-    // gather local t x
-    // gather local t y
+    printf("END BUILDING LOCAL TX AND TY ARRAYS ON PROCESS %d\n", rank);
+    fflush(stdout);
+
+
+    printf("PROCESS %d HAS REACHED THE FINAL BARRIER\n", rank);
+    fflush(stdout);
+    MPI_Barrier(MPI_COMM_WORLD);
+
+
+    if (rank == 0) {
+        local_output_array_sizes = malloc(sizeof(long int) * num_processes);
+    }
+
+    // retrieve size of arrays from each rank
+    printf("PROCESS %d: SENDING OUTPUT ARRAY SIZE %ld AND NUM_PROCESSES %d\n", rank, local_output_array_size, num_processes);
+    fflush(stdout);
+    MPI_Gather(&local_output_array_size, 1, MPI_LONG, local_output_array_sizes, num_processes, MPI_LONG, 0, MPI_COMM_WORLD);
+
+    if (rank == 0) {
+        for (int i = 0; i < num_processes; i++) {
+            printf("PROCESS %d: OUTPUT ARRAY SIZE OF PROCESS %d WAS RECEIVED AS %ld\n", rank, i, local_output_array_sizes[i]);
+            fflush(stdout);
+        }
+
+        local_output_array_displacements = malloc(sizeof(long int) * num_processes);
+
+        output_array_size = 0;
+        for (int i = 0; i < num_processes; i++) {
+            output_array_size += local_output_array_sizes[i];
+            
+            if (i == 0) {
+                local_output_array_displacements[i] = 0;
+            }
+            else {
+                local_output_array_displacements[i] = local_output_array_displacements[i - 1] + local_output_array_sizes[i - 1];
+            }
+        }
+
+        printf("PROCESS %d: FINAL OUTPUT ARRAY SIZE IS %ld\n", rank, output_array_size);
+        fflush(stdout);
+
+        t_x = (double*) malloc(sizeof(double) * (output_array_size));
+        if (t_x == NULL) {
+            printf("Not enough memory for x\n");
+            fflush(stdout);
+            return 1;
+        }
+
+        t_y = (double*) malloc(sizeof(double) * (output_array_size));
+        if (t_y == NULL) {
+            printf("Not enough memory for y\n");
+            fflush(stdout);
+            return 1;
+        }
+    }
+
+    // gather t x to single array
+    MPI_Gatherv(local_t_x, output_array_size, MPI_DOUBLE, t_x, local_output_array_sizes, local_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    // gather t y to single array
+    MPI_Gatherv(local_t_y, output_array_size, MPI_DOUBLE, t_y, local_output_array_sizes, local_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     //prints all data points 
     //for (int i=0;i<temp_max+temp_min;i++)
@@ -133,28 +342,32 @@ int main(int argc, char* argv[])
     //    printf("(%.3f, %.3f)\n",t_y[i],t_x[i]);
     //}
 
-    // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
-    double c[ORDER];
-    // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
-    // return 0 -> we good
-    // return -1 -> no good
-    float midtime=MPI_Wtime()-starttime;
-    int result=polyfit(t_x,t_y,temp_max+temp_min,ORDER,c);
-    if (result==-1)
-    {
-        printf("OwO whoopsie\n");
-        return EXIT_FAILURE;
-    }
+    if (rank == 0) {
+        // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
+        double c[ORDER];
+        // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
+        // return 0 -> we good
+        // return -1 -> no good
+        float midtime = MPI_Wtime()-starttime;
+        int result = polyfit(t_x, t_y, output_array_size, ORDER, c);
+        if (result == -1)
+        {
+            printf("OwO whoopsie\n");
+            return EXIT_FAILURE;
+        }
 
-    print_equation(c);
-    // args - coefficients array and the X value it will use
-    // X value will be the "day" we are predicting for
-    // Will most likely need to add another arg for month
-    double prediction = predictTemp(c,100);
-    printf("%f\n",prediction);
-    float endtime=MPI_Wtime()-starttime;
-    printf("Mid time:%f\n",midtime);
-    printf("End time:%f\n",endtime);
+        print_equation(c);
+
+        // args - coefficients array and the X value it will use
+        // X value will be the "day" we are predicting for
+        // Will most likely need to add another arg for month
+        double prediction = predictTemp(c,100);
+        printf("%f\n", prediction);
+
+        float endtime=MPI_Wtime()-starttime;
+        printf("Mid time:%f\n",midtime);
+        printf("End time:%f\n",endtime);
+    }
     MPI_Finalize();
     return 0;
 }
