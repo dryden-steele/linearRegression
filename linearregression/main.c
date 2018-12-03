@@ -374,31 +374,26 @@ int main(int argc, char* argv[])
             printf("OwO whoopsie\n");
             return EXIT_FAILURE;
         }
-        long int e=sizeof(c)/sizeof(*c);
-        for (int i=0;i<e;++i)
-        {
-            printf("%f\n",c[i]);
-        }
         printf("\n");
-        print_equation(c);
+        //print_equation(c);
 
         // args - coefficients array and the X value it will use
         // X value will be the "day" we are predicting for
         // Will most likely need to add another arg for month
         double endtime = MPI_Wtime(); 
-        printf("Mid time taken:%f\n", midtime - starttime); 
-        printf("End time taken:%f\n", endtime - midtime); 
-        printf("Total time taken:%f\n", endtime - starttime);
+        //printf("Mid time taken:%f\n", midtime - starttime); 
+        //printf("End time taken:%f\n", endtime - midtime);
+        printf("P=%d\tT=%s\n",num_processes,argv[1]);
+        printf("Total time taken:%f\n\n\n", endtime - starttime);
         int input=0;
-        printf("Enter a prediction: ");
-        scanf("%d",&input);
-        if (input==-1) return 0;
-        do
-        {
-            double prediction = predictTemp(c,input); 
-            printf("Prediction: %f degrees Celsius\n", prediction); 
-            scanf("%d",&input);
-        }while (input!=-1);
+        //scanf("%d",&input);
+        //if (input==-1) return 0;
+        //do
+        //{
+        //    double prediction = predictTemp(c,input); 
+        //    printf("Prediction: %f degrees Celsius\n", prediction); 
+        //    scanf("%d",&input);
+        //}while (input!=-1);
     }
     MPI_Finalize();
     return 0;
