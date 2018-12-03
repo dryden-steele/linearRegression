@@ -14,7 +14,7 @@
 
 // Order of polynomial; ie. highest degree of x
 // Will probably tweak this somehow to get more accurate without destrying our efficency
-const int ORDER=10;
+const int ORDER=4;
 const int CSV_NUM=41;
 // Prototype declarations boi
 void print_equation(double *coefficients);
@@ -385,12 +385,20 @@ int main(int argc, char* argv[])
         // args - coefficients array and the X value it will use
         // X value will be the "day" we are predicting for
         // Will most likely need to add another arg for month
-        double prediction = predictTemp(c,200); 
-        printf("%f\n", prediction); 
         double endtime = MPI_Wtime(); 
         printf("Mid time taken:%f\n", midtime - starttime); 
         printf("End time taken:%f\n", endtime - midtime); 
         printf("Total time taken:%f\n", endtime - starttime);
+        int input=0;
+        printf("Enter a prediction: ");
+        scanf("%d",&input);
+        if (input==-1) return 0;
+        do
+        {
+            double prediction = predictTemp(c,input); 
+            printf("Prediction: %f degrees Celsius\n", prediction); 
+            scanf("%d",&input);
+        }while (input!=-1);
     }
     MPI_Finalize();
     return 0;
@@ -409,7 +417,7 @@ double predictTemp(double *coefficients,double x_point)
         tmp=coefficients[ORDER-i-1]*pow(x_point,ORDER-i-1);
         y_point+=tmp;
     }
-    return y_point;
+    return y_point/10;
 }
 
 // Prints out the polynomial in human readable form
