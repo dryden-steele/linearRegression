@@ -92,13 +92,13 @@ int main(int argc, char* argv[])
                 int index = j + data_displacements[i];
 
                 // Send filename
-                printf("Sending filename \"%s\" to process %d from process %d\n", csv_files[index], i, rank);
-                fflush(stdout);
+                //printf("Sending filename \"%s\" to process %d from process %d\n", csv_files[index], i, rank);
+                //fflush(stdout);
                 MPI_Send(&csv_files[index], strlen(csv_files[index]), MPI_CHAR, i, 0, MPI_COMM_WORLD);
 
                 // Send file size
-                printf("Sending file length %d to process %d from process %d\n", csv_lines[index], i, rank);
-                fflush(stdout);
+                //printf("Sending file length %d to process %d from process %d\n", csv_lines[index], i, rank);
+                //fflush(stdout);
                 MPI_Send(&csv_lines[index], 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             }
         }
@@ -114,10 +114,12 @@ int main(int argc, char* argv[])
        
         for (int i = 0; i < data_sizes[0]; i++) {
             local_csv_files[i] = strdup(csv_files[i]);
-            printf("Process %d placed filename \"%s\" for index %d\n", rank, local_csv_files[i], i);
+            //printf("Process %d placed filename \"%s\" for index %d\n", rank, local_csv_files[i], i);
+            //fflush(stdout);
 
             local_csv_lines[i] = csv_lines[i];
-            printf("Process %d placed file length %d for index %d\n", rank, local_csv_lines[i], i);
+            //printf("Process %d placed file length %d for index %d\n", rank, local_csv_lines[i], i);
+            //fflush(stdout);
         }
 
         printf("END SETTING FILENAMES AND FILE SIZES ON PROCESSES %d\n", rank);
@@ -135,13 +137,13 @@ int main(int argc, char* argv[])
 
             // Receive filename
             MPI_Recv(&local_csv_files[i], 16, MPI_CHAR, 0, 0, MPI_COMM_WORLD, NULL);
-            printf("Process %d received filename \"%s\" for index %d\n", rank, local_csv_files[i], i);
-            fflush(stdout);
+            //printf("Process %d received filename \"%s\" for index %d\n", rank, local_csv_files[i], i);
+            //fflush(stdout);
 
             // Receive file size
             MPI_Recv(&local_csv_lines[i], 1, MPI_INT, 0, 0, MPI_COMM_WORLD, NULL);
-            printf("Process %d received file length %d for index %d\n", rank, local_csv_lines[i], i);
-            fflush(stdout);
+            //printf("Process %d received file length %d for index %d\n", rank, local_csv_lines[i], i);
+            //fflush(stdout);
         }
 
         printf("END RECEIVEING FILENAME AND FILE SIZE ON PROCESS %d\n", rank);
@@ -149,7 +151,7 @@ int main(int argc, char* argv[])
     }
 
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
     
     local_weather_array = malloc(sizeof(struct weather_data*) * data_sizes[rank]);
@@ -159,8 +161,8 @@ int main(int argc, char* argv[])
 
     for (int i = 0; i < data_sizes[rank]; i++)
     {
-        printf("GETTING WEATHER DATA FOR FILE %s (LENGTH %d) ON PROCESS %d AT INDEX %d\n", local_csv_files[i], local_csv_lines[i], rank, i);
-        fflush(stdout);
+        //printf("GETTING WEATHER DATA FOR FILE %s (LENGTH %d) ON PROCESS %d AT INDEX %d\n", local_csv_files[i], local_csv_lines[i], rank, i);
+        //fflush(stdout);
         local_weather_array[i] = get_data_array(local_csv_files[i], local_csv_lines[i]);
     }
     
@@ -168,7 +170,7 @@ int main(int argc, char* argv[])
     fflush(stdout);
 
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
 
     printf("START INITIALIZING OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
@@ -185,7 +187,7 @@ int main(int argc, char* argv[])
     fflush(stdout);
 
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
 
     printf("START COUNTING NUMBER OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
@@ -208,7 +210,7 @@ int main(int argc, char* argv[])
     fflush(stdout);
 
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
 
     printf("START ADDING NUMBER OF TEMP MAX AND MIN ON PROCESS %d\n", rank);
@@ -229,7 +231,7 @@ int main(int argc, char* argv[])
     printf("PROCESS %d local_temp_max = %lld\tlocal_temp_min = %lld\nlocal sum = %ld\n", rank, local_temp_max, local_temp_min, local_output_array_size);
     fflush(stdout);
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
     local_t_x = (double*) malloc(sizeof(double) * (local_output_array_size));
     if (local_t_x == NULL) {
@@ -280,7 +282,7 @@ int main(int argc, char* argv[])
 
     printf("PROCESS %d HAS REACHED THE FINAL BARRIER\n", rank);
     fflush(stdout);
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
 
     if (rank == 0) {
@@ -290,7 +292,7 @@ int main(int argc, char* argv[])
     // retrieve size of arrays from each rank
     printf("PROCESS %d: SENDING OUTPUT ARRAY SIZE %ld AND NUM_PROCESSES %d\n", rank, local_output_array_size, num_processes);
     fflush(stdout);
-    MPI_Gather(&local_output_array_size, 1, MPI_LONG, local_output_array_sizes, num_processes, MPI_LONG, 0, MPI_COMM_WORLD);
+    MPI_Gather(&local_output_array_size, 1, MPI_LONG, local_output_array_sizes, 1, MPI_LONG, 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
         for (int i = 0; i < num_processes; i++) {
@@ -310,6 +312,12 @@ int main(int argc, char* argv[])
             else {
                 local_output_array_displacements[i] = local_output_array_displacements[i - 1] + local_output_array_sizes[i - 1];
             }
+        }
+        
+        for (int i = 0; i < num_processes; i++) {
+            printf("SIZE FOR ARRAY ON PROCESS %d IS %ld\n", i, local_output_array_sizes[i]);
+            printf("DISPLACEMENT FOR ARRAY ON PROCESS %d IS %ld\n", i, local_output_array_displacements[i]);
+            fflush(stdout);
         }
 
         printf("PROCESS %d: FINAL OUTPUT ARRAY SIZE IS %ld\n", rank, output_array_size);
@@ -331,16 +339,25 @@ int main(int argc, char* argv[])
     }
 
     // gather t x to single array
-    MPI_Gatherv(local_t_x, output_array_size, MPI_DOUBLE, t_x, local_output_array_sizes, local_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    printf("PROCESS %d: SENDING LOCAL OUTPUT ARRAY T X AND NUM_PROCESSES %d\n", rank, num_processes);
+    fflush(stdout);
+    MPI_Gatherv(local_t_x, local_output_array_size, MPI_DOUBLE, t_x, local_output_array_sizes, local_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // gather t y to single array
-    MPI_Gatherv(local_t_y, output_array_size, MPI_DOUBLE, t_y, local_output_array_sizes, local_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    printf("PROCESS %d: SENDING LOCAL OUTPUT ARRAY T Y AND NUM_PROCESSES %d\n", rank, num_processes);
+    fflush(stdout);
+    MPI_Gatherv(local_t_y, local_output_array_size, MPI_DOUBLE, t_y, local_output_array_sizes, local_output_array_displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     //prints all data points 
     //for (int i=0;i<temp_max+temp_min;i++)
     //{
     //    printf("(%.3f, %.3f)\n",t_y[i],t_x[i]);
     //}
+
+
+    printf("MPI COMMUNICATION COMPLETE ON PROCESS %d\n", rank);
+    //MPI_Barrier(MPI_COMM_WORLD);
+
 
     if (rank == 0) {
         // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
