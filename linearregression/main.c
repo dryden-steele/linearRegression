@@ -296,14 +296,17 @@ int main(int argc, char* argv[])
                 char cday[3];
                 int month;
                 int day;
-                itoa(tmp->date,cdate);
+                itoa(tmp[i].date,cdate);
                 memcpy(cmonth,&cdate[4],2);
                 memcpy(cday,&cdate[6],2);
                 cmonth[2]='\0';
                 cday[2]='\0';
                 month=atoi(cmonth);
                 day=atoi(cday);
-                local_t_x[local_count_x] = (double)days_in_month[month]+day;
+                if (month!=1)
+                    local_t_x[local_count_x] = (double)days_in_month[month-2]+day;
+                else
+                    local_t_x[local_count_x] = (double)day;
                 local_t_y[local_count_x] = (double)tmp[i].value;
                 count_max++;
                 local_count_x++;
@@ -316,14 +319,18 @@ int main(int argc, char* argv[])
                 char cday[3];
                 int month;
                 int day;
-                itoa(tmp->date,cdate);
+                itoa(tmp[i].date,cdate);
                 memcpy(cmonth,&cdate[4],2);
                 memcpy(cday,&cdate[6],2);
                 cmonth[2]='\0';
                 cday[2]='\0';
                 month=atoi(cmonth);
                 day=atoi(cday);
-                local_t_x[local_count_x] = (double)days_in_month[month]+day;
+                if (month!=1)
+                    local_t_x[local_count_x] = (double)days_in_month[month-2]+day;
+                else
+                    local_t_x[local_count_x] = (double)day;
+
                 local_t_y[local_count_x] = (double)tmp[i].value;
                 count_min++;
                 local_count_x++;
@@ -422,12 +429,17 @@ int main(int argc, char* argv[])
         // return -1 -> no good
 
         //double midtime = MPI_Wtime();
+        for (int i=0;i<output_array_size;i++)
+        {
+            printf("%f::%f\n",t_x[i],t_y[i]);
+        }
 
         int result = polyfit(t_x, t_y, output_array_size, ORDER, c);
 
         if (result == -1)
         {
             printf("OwO whoopsie\n");
+            printf("%ld",sizeof(c)/sizeof(*c));
             return EXIT_FAILURE;
         }
         printf("\n");
