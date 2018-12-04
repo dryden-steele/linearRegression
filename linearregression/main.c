@@ -14,7 +14,7 @@
 
 // Order of polynomial; ie. highest degree of x
 // Will probably tweak this somehow to get more accurate without destrying our efficency
-const int ORDER=4;
+const int ORDER=20;
 const int CSV_NUM=40;
 const int days_in_month[]={31,59,90,120,151,181,212,243,273,303,333};
 // Prototype declarations boi
@@ -311,30 +311,30 @@ int main(int argc, char* argv[])
                 count_max++;
                 local_count_x++;
             }
-            else if (strcmp(tmp[i].name,"TMIN") == 0)
-            {
-                //local_t_x[local_count_x] = (double)count_max;
-                char cdate[8];
-                char cmonth[3];
-                char cday[3];
-                int month;
-                int day;
-                itoa(tmp[i].date,cdate);
-                memcpy(cmonth,&cdate[4],2);
-                memcpy(cday,&cdate[6],2);
-                cmonth[2]='\0';
-                cday[2]='\0';
-                month=atoi(cmonth);
-                day=atoi(cday);
-                if (month!=1)
-                    local_t_x[local_count_x] = (double)days_in_month[month-2]+day;
-                else
-                    local_t_x[local_count_x] = (double)day;
+            //else if (strcmp(tmp[i].name,"TMIN") == 0)
+            //{
+            //    //local_t_x[local_count_x] = (double)count_max;
+            //    char cdate[8];
+            //    char cmonth[3];
+            //    char cday[3];
+            //    int month;
+            //    int day;
+            //    itoa(tmp[i].date,cdate);
+            //    memcpy(cmonth,&cdate[4],2);
+            //    memcpy(cday,&cdate[6],2);
+            //    cmonth[2]='\0';
+            //    cday[2]='\0';
+            //    month=atoi(cmonth);
+            //    day=atoi(cday);
+            //    if (month!=1)
+            //        local_t_x[local_count_x] = (double)days_in_month[month-2]+day;
+            //    else
+            //        local_t_x[local_count_x] = (double)day;
 
-                local_t_y[local_count_x] = (double)tmp[i].value;
-                count_min++;
-                local_count_x++;
-            }
+            //    local_t_y[local_count_x] = (double)tmp[i].value;
+            //    count_min++;
+            //    local_count_x++;
+            //}
         }
     }
 
@@ -429,12 +429,12 @@ int main(int argc, char* argv[])
         // return -1 -> no good
 
         //double midtime = MPI_Wtime();
-        for (int i=0;i<output_array_size;i++)
-        {
-            printf("%f::%f\n",t_x[i],t_y[i]);
-        }
 
-        int result = polyfit(t_x, t_y, output_array_size, ORDER, c);
+        for (int i=0;i<output_array_size;++i)
+        {
+            printf("%f %f\n",t_x[i],t_y[i]);
+        }
+        int result = polyfit(t_x, t_y, output_array_size/2, ORDER, c);
 
         if (result == -1)
         {
@@ -453,12 +453,13 @@ int main(int argc, char* argv[])
         //printf("End time taken:%f\n", endtime - midtime);
         //printf("P=%d\tT=%s\n",num_processes,argv[1]);
         //printf("Total time taken:%f\n\n\n", endtime - starttime);
-        int input=0;
+        int input;
         scanf("%d",&input);
         while(input!=-1)
         {
             double prediction = predictTemp(c,input); 
-            printf("Prediction: %f degrees Celsius\n", prediction); 
+            printf("Prediction: %f degrees Celsius\n",prediction); 
+            fflush(stdout);
             scanf("%d",&input);
         }
     }
