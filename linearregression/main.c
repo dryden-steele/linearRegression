@@ -15,7 +15,8 @@
 // Order of polynomial; ie. highest degree of x
 // Will probably tweak this somehow to get more accurate without destrying our efficency
 const int ORDER=4;
-const int CSV_NUM=41;
+const int CSV_NUM=40;
+const int days_in_month[]={31,59,90,120,151,181,212,243,273,303,333};
 // Prototype declarations boi
 void print_equation(long double *coefficients);
 double predictTemp(long double* coefficients,double f);
@@ -261,6 +262,7 @@ int main(int argc, char* argv[])
         {
             if (strcmp(tmp[i].name,"TMAX") == 0)
             {
+                //local_t_x[local_count_x] = (double)count_max;
                 local_t_x[local_count_x] = (double)count_max;
                 local_t_y[local_count_x] = (double)tmp[i].value;
                 count_max++;
@@ -268,6 +270,8 @@ int main(int argc, char* argv[])
             }
             else if (strcmp(tmp[i].name,"TMIN") == 0)
             {
+                
+
                 local_t_x[local_count_x] = (double)count_min;
                 local_t_y[local_count_x] = (double)tmp[i].value;
                 count_min++;
