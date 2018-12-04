@@ -21,6 +21,34 @@ const int days_in_month[]={31,59,90,120,151,181,212,243,273,303,333};
 void print_equation(long double *coefficients);
 double predictTemp(long double* coefficients,double f);
 
+void reverse(char s[])
+{
+     int i, j;
+     char c;
+
+     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+         c = s[i];
+         s[i] = s[j];
+         s[j] = c;
+     }
+}  
+void itoa(int n, char s[])
+{
+     int i, sign;
+
+     if ((sign = n) < 0)  /* record sign */
+         n = -n;          /* make n positive */
+     i = 0;
+     do {       /* generate digits in reverse order */
+         s[i++] = n % 10 + '0';   /* get next digit */
+     } while ((n /= 10) > 0);     /* delete it */
+     if (sign < 0)
+         s[i++] = '-';
+     s[i] = '\0';
+     reverse(s);
+}  
+
+
 int main(int argc, char* argv[])
 {
     int num_processes;
@@ -263,16 +291,39 @@ int main(int argc, char* argv[])
             if (strcmp(tmp[i].name,"TMAX") == 0)
             {
                 //local_t_x[local_count_x] = (double)count_max;
-                local_t_x[local_count_x] = (double)count_max;
+                char cdate[8];
+                char cmonth[3];
+                char cday[3];
+                int month;
+                int day;
+                itoa(tmp->date,cdate);
+                memcpy(cmonth,&cdate[4],2);
+                memcpy(cday,&cdate[6],2);
+                cmonth[2]='\0';
+                cday[2]='\0';
+                month=atoi(cmonth);
+                day=atoi(cday);
+                local_t_x[local_count_x] = (double)days_in_month[month]+day;
                 local_t_y[local_count_x] = (double)tmp[i].value;
                 count_max++;
                 local_count_x++;
             }
             else if (strcmp(tmp[i].name,"TMIN") == 0)
             {
-                
-
-                local_t_x[local_count_x] = (double)count_min;
+                //local_t_x[local_count_x] = (double)count_max;
+                char cdate[8];
+                char cmonth[3];
+                char cday[3];
+                int month;
+                int day;
+                itoa(tmp->date,cdate);
+                memcpy(cmonth,&cdate[4],2);
+                memcpy(cday,&cdate[6],2);
+                cmonth[2]='\0';
+                cday[2]='\0';
+                month=atoi(cmonth);
+                day=atoi(cday);
+                local_t_x[local_count_x] = (double)days_in_month[month]+day;
                 local_t_y[local_count_x] = (double)tmp[i].value;
                 count_min++;
                 local_count_x++;
