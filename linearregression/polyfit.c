@@ -6,14 +6,14 @@ int polyfit(const double* const dependentValues,
             const double* const independentValues,
             unsigned int countOfElements,
             unsigned int order,
-            double* coefficients)
+            long double* coefficients)
 {
     // Declarations
-    double B[MAX_ORDER+1] = {0.0f};
-    double P[((MAX_ORDER+1) * 2)+1] = {0.0f};
-    double A[(MAX_ORDER + 1)*2*(MAX_ORDER + 1)] = {0.0f};
+    long double B[MAX_ORDER+1] = {0.0f};
+    long double P[((MAX_ORDER+1) * 2)+1] = {0.0f};
+    long double A[(MAX_ORDER + 1)*2*(MAX_ORDER + 1)] = {0.0f};
 
-    double x, y, powx;
+    long double x, y, powx;
 
     unsigned int ii, jj, kk;
 

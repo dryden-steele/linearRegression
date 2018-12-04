@@ -10,7 +10,7 @@ int polyfit(const double* const dependentValues,
             const double* const independentValues,
             unsigned int        countOfElements,
             unsigned int        order,
-            double*             coefficients);
+            long double*             coefficients);
 
 
 #ifdef __cplusplus

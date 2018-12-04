@@ -17,8 +17,8 @@
 const int ORDER=4;
 const int CSV_NUM=41;
 // Prototype declarations boi
-void print_equation(double *coefficients);
-double predictTemp(double* coefficients,double f);
+void print_equation(long double *coefficients);
+double predictTemp(long double* coefficients,double f);
 
 int main(int argc, char* argv[])
 {
@@ -361,39 +361,39 @@ int main(int argc, char* argv[])
 
     if (rank == 0) {
         // Stores the coefficients;  coefficients[5]x^5/coefficients[4]x^4/....
-        double c[ORDER+1];
+        long double c[ORDER+1];
         // Takes in two arrays for points, the # of elements, and the order and stores it in the coefficients pointer
         // return 0 -> we good
         // return -1 -> no good
 
-        double midtime = MPI_Wtime();
+        //double midtime = MPI_Wtime();
 
         int result = polyfit(t_x, t_y, output_array_size, ORDER, c);
+
         if (result == -1)
         {
             printf("OwO whoopsie\n");
             return EXIT_FAILURE;
         }
         printf("\n");
-        //print_equation(c);
+        print_equation(c);
 
         // args - coefficients array and the X value it will use
         // X value will be the "day" we are predicting for
         // Will most likely need to add another arg for month
-        double endtime = MPI_Wtime(); 
+        //double endtime = MPI_Wtime(); 
         //printf("Mid time taken:%f\n", midtime - starttime); 
         //printf("End time taken:%f\n", endtime - midtime);
-        printf("P=%d\tT=%s\n",num_processes,argv[1]);
-        printf("Total time taken:%f\n\n\n", endtime - starttime);
+        //printf("P=%d\tT=%s\n",num_processes,argv[1]);
+        //printf("Total time taken:%f\n\n\n", endtime - starttime);
         int input=0;
-        //scanf("%d",&input);
-        //if (input==-1) return 0;
-        //do
-        //{
-        //    double prediction = predictTemp(c,input); 
-        //    printf("Prediction: %f degrees Celsius\n", prediction); 
-        //    scanf("%d",&input);
-        //}while (input!=-1);
+        scanf("%d",&input);
+        while(input!=-1)
+        {
+            double prediction = predictTemp(c,input); 
+            printf("Prediction: %f degrees Celsius\n", prediction); 
+            scanf("%d",&input);
+        }
     }
     MPI_Finalize();
     return 0;
@@ -403,7 +403,7 @@ int main(int argc, char* argv[])
 // Returns the 'y' value which would be the prediction
 // Will need to change this up soon to accept a month as well and then pick from the correct month
 // ^ this will require coefficients to also change
-double predictTemp(double *coefficients,double x_point)
+double predictTemp(long double *coefficients,double x_point)
 {
     double y_point=0;
     for (int i=0;i<ORDER;i++)
@@ -416,13 +416,13 @@ double predictTemp(double *coefficients,double x_point)
 }
 
 // Prints out the polynomial in human readable form
-void print_equation(double *coefficients)
+void print_equation(long double *coefficients)
 {
     for (int i=0;i<ORDER+1;i++)
     {
         if (i!=ORDER)
-            printf("%fx^%d + ",coefficients[ORDER-i],ORDER-i);
+            printf("%LEx^%d + ",coefficients[ORDER-i],ORDER-i);
         else
-            printf("%f\n",coefficients[ORDER-i]);
+            printf("%Lf\n",coefficients[ORDER-i]);
     }
 }
