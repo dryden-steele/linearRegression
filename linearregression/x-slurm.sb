@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH -A isu100
+#SBATCH --job-name="WeatherPrediction"
+#SBATCH --output="WeatherPrediction.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=24
+#SBATCH --export=ALL
+#SBATCH -t 00:5:00
+
+
+
+ibrun -n 2 -v ./WeatherPrediction 1 -llibmpi
+ibrun -n 4 -v ./WeatherPrediction 1 -llibmpi
+ibrun -n 8 -v ./WeatherPrediction 1 -llibmpi
+ibrun -n 16 -v ./WeatherPrediction 1 -llibmpi
+

@@ -1,0 +1,389 @@
+IBRUN: Command is ./WeatherPrediction
+IBRUN: Command is /home/lrnowac/linearRegression/linearregression/WeatherPrediction
+IBRUN: Even number of ranks per node (1)--hacking nodefile...
+IBRUN: Running on 2 unique nodes
+IBRUN: Will place 1 ranks on comet-11-03 with 24 threads each
+IBRUN: Will place 1 ranks on comet-11-04 with 24 threads each
+IBRUN: Nodefile is /tmp/lwMnMD7SDk
+IBRUN: MPI binding policy: illogical/arbitrary for 24 threads per rank (12 cores per socket)
+IBRUN: Adding MV2_CPU_MAPPING=0-23 to the environment
+IBRUN: Adding MV2_USE_OLD_BCAST=1 to the environment
+IBRUN: Adding MV2_USE_HUGEPAGES=0 to the environment
+IBRUN: Adding MV2_HOMOGENEOUS_CLUSTER=0 to the environment
+IBRUN: Adding MV2_ENABLE_AFFINITY=1 to the environment
+IBRUN: Adding MV2_DEFAULT_TIME_OUT=23 to the environment
+IBRUN: Adding MV2_USE_UD_HYBRID=0 to the environment
+IBRUN: Added 7 new environment variables to the execution environment
+IBRUN: Command string is [mpirun_rsh -np 2 -hostfile /tmp/lwMnMD7SDk -export-all /home/lrnowac/linearRegression/linearregression/WeatherPrediction 1]
+/home/lrnowac/linearRegression/linearregression/WeatherPrediction: error while loading shared libraries: libmpi.so.40: cannot open shared object file: No such file or directory
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 1, pid: 26776) exited with status 127
+Timeout during client startup.
+*** glibc detected *** mpirun_rsh: free(): invalid pointer: 0x0000000001c5ee40 ***
+======= Backtrace: =========
+/lib64/libc.so.6[0x3f5ee75e5e]
+/lib64/libc.so.6[0x3f5ee78cad]
+mpirun_rsh(free_memory+0x4a)[0x40989a]
+mpirun_rsh(main+0x69c)[0x405cfc]
+/lib64/libc.so.6(__libc_start_main+0x100)[0x3f5ee1ed20]
+mpirun_rsh[0x405519]
+======= Memory map: ========
+00400000-00426000 r-xp 00000000 09:01 2515664                            /opt/mvapich2/intel/ib/bin/mpirun_rsh
+00626000-00628000 rw-p 00026000 09:01 2515664                            /opt/mvapich2/intel/ib/bin/mpirun_rsh
+00628000-0062d000 rw-p 00000000 00:00 0 
+01c59000-01c7a000 rw-p 00000000 00:00 0                                  [heap]
+3f5ea00000-3f5ea20000 r-xp 00000000 09:01 1179711                        /lib64/ld-2.12.so
+3f5ec20000-3f5ec21000 r--p 00020000 09:01 1179711                        /lib64/ld-2.12.so
+3f5ec21000-3f5ec22000 rw-p 00021000 09:01 1179711                        /lib64/ld-2.12.so
+3f5ec22000-3f5ec23000 rw-p 00000000 00:00 0 
+3f5ee00000-3f5ef8b000 r-xp 00000000 09:01 1179771                        /lib64/libc-2.12.so
+3f5ef8b000-3f5f18a000 ---p 0018b000 09:01 1179771                        /lib64/libc-2.12.so
+3f5f18a000-3f5f18e000 r--p 0018a000 09:01 1179771                        /lib64/libc-2.12.so
+3f5f18e000-3f5f190000 rw-p 0018e000 09:01 1179771                        /lib64/libc-2.12.so
+3f5f190000-3f5f194000 rw-p 00000000 00:00 0 
+3f5f200000-3f5f283000 r-xp 00000000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f283000-3f5f482000 ---p 00083000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f482000-3f5f483000 r--p 00082000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f483000-3f5f484000 rw-p 00083000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f600000-3f5f617000 r-xp 00000000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f617000-3f5f817000 ---p 00017000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f817000-3f5f818000 r--p 00017000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f818000-3f5f819000 rw-p 00018000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f819000-3f5f81d000 rw-p 00000000 00:00 0 
+3f5fa00000-3f5fa02000 r-xp 00000000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fa02000-3f5fc02000 ---p 00002000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fc02000-3f5fc03000 r--p 00002000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fc03000-3f5fc04000 rw-p 00003000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fe00000-3f5fe16000 r-xp 00000000 09:01 2887299                        /usr/lib64/librdmacm.so.1.0.0
+3f5fe16000-3f60016000 ---p 00016000 09:01 2887299                        /usr/lib64/librdmacm.so.1.0.0
+3f60016000-3f60017000 rw-p 00016000 09:01 2887299                        /usr/lib64/librdmacm.so.1.0.0
+3f60017000-3f60018000 rw-p 00000000 00:00 0 
+3f60200000-3f60214000 r-xp 00000000 09:01 2905888                        /usr/lib64/libibmad.so.5.5.0
+3f60214000-3f60414000 ---p 00014000 09:01 2905888                        /usr/lib64/libibmad.so.5.5.0
+3f60414000-3f6041e000 rw-p 00014000 09:01 2905888                        /usr/lib64/libibmad.so.5.5.0
+3f60600000-3f60608000 r-xp 00000000 09:01 2896280                        /usr/lib64/libibumad.so.3.1.0
+3f60608000-3f60807000 ---p 00008000 09:01 2896280                        /usr/lib64/libibumad.so.3.1.0
+3f60807000-3f60808000 rw-p 00007000 09:01 2896280                        /usr/lib64/libibumad.so.3.1.0
+3f61e00000-3f61e4d000 r-xp 00000000 09:01 1180543                        /lib64/libnl.so.1.1.4
+3f61e4d000-3f6204c000 ---p 0004d000 09:01 1180543                        /lib64/libnl.so.1.1.4
+3f6204c000-3f62052000 rw-p 0004c000 09:01 1180543                        /lib64/libnl.so.1.1.4
+2ac23372c000-2ac23372d000 rw-p 00000000 00:00 0 
+2ac233747000-2ac233749000 rw-p 00000000 00:00 0 
+2ac233749000-2ac233760000 r-xp 00000000 09:01 2915571                    /usr/lib64/libibverbs.so.1.0.0
+2ac233760000-2ac23395f000 ---p 00017000 09:01 2915571                    /usr/lib64/libibverbs.so.1.0.0
+2ac23395f000-2ac233960000 rw-p 00016000 09:01 2915571                    /usr/lib64/libibverbs.so.1.0.0
+2ac233960000-2ac233967000 r-xp 00000000 09:01 1179783                    /lib64/librt-2.12.so
+2ac233967000-2ac233b66000 ---p 00007000 09:01 1179783                    /lib64/librt-2.12.so
+2ac233b66000-2ac233b67000 r--p 00006000 09:01 1179783                    /lib64/librt-2.12.so
+2ac233b67000-2ac233b68000 rw-p 00007000 09:01 1179783                    /lib64/librt-2.12.so
+2ac233b68000-2ac233b69000 rw-p 00000000 00:00 0 
+2ac233b69000-2ac233b6a000 r-xp 00000000 09:01 2515704                    /opt/mvapich2/intel/ib/lib/liblimic2.so.0.0.0
+2ac233b6a000-2ac233d69000 ---p 00001000 09:01 2515704                    /opt/mvapich2/intel/ib/lib/liblimic2.so.0.0.0
+2ac233d69000-2ac233d6a000 rw-p 00000000 09:01 2515704                    /opt/mvapich2/intel/ib/lib/liblimic2.so.0.0.0
+2ac233d6a000-2ac233d80000 r-xp 00000000 09:01 2364455                    /opt/gnu/gcc/lib64/libgcc_s.so.1
+2ac233d80000-2ac233f7f000 ---p 00016000 09:01 2364455                    /opt/gnu/gcc/lib64/libgcc_s.so.1
+2ac233f7f000-2ac233f80000 rw-p 00015000 09:01 2364455                    /opt/gnu/gcc/lib64/libgcc_s.so.1
+2ac233f80000-2ac233f82000 rw-p 00000000 00:00 0 
+2ac233f82000-2ac234203000 r-xp 00000000 09:01 3810638                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libimf.so
+2ac234203000-2ac234402000 ---p 00281000 09:01 3810638                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libimf.so
+2ac234402000-2ac234445000 rw-p 00280000 09:01 3810638                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libimf.so
+2ac234445000-2ac234e09000 r-xp 00000000 09:01 3810650                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libsvml.so
+2ac234e09000-2ac235009000 ---p 009c4000 09:01 3810650                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libsvml.so
+2ac235009000-2ac235040000 rw-p 009c4000 09:01 3810650                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libsvml.so
+2ac235040000-2ac235045000 r-xp 00000000 09:01 3810644                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libirng.so
+2ac235045000-2ac235245000 ---p 00005000 09:01 3810644                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libirng.so
+2ac235245000-2ac235247000 rw-p 00005000 09:01 3810644                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libirng.so
+2ac235247000-2ac235248000 rw-p 00000000 00:00 0 
+2ac235248000-2ac23529a000 r-xp 00000000 09:01 3810640                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libintlc.so.5
+2ac23529a000-2ac23549a000 ---p 00052000 09:01 3810640                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libintlc.so.5
+2ac23549a000-2ac23549d000 rw-p 00052000 09:01 3810640                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libintlc.so.5
+2ac23549d000-2ac2354a1000 rw-p 00000000 00:00 0 
+2ac2354a1000-2ac2354a2000 ---p 00000000 00:00 0 
+2ac2354a2000-2ac2356a2000 rw-p 00000000 00:00 0 
+2ac2356bc000-2ac2356c9000 r-xp 00000000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2ac2356c9000-2ac2358c8000 ---p 0000d000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2ac2358c8000-2ac2358c9000 r--p 0000c000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2ac2358c9000-2ac2358ca000 rw-p 0000d000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2ac2358ca000-2ac2358cb000 ---p 00000000 00:00 0 
+2ac2358cb000-2ac235acc000 rw-p 00000000 00:00 0 
+7ffe35b73000-7ffe35b8a000 rw-p 00000000 00:00 0                          [stack]
+7ffe35bc8000-7ffe35bc9000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+[comet-11-03.sdsc.edu:mpirun_rsh][error_sighandler] Caught error: Aborted (signal 6)
+read: Connection reset by peer
+Error writing receiving environ!
+IBRUN: Job died with signal 6, without core dump
+IBRUN: Command is ./WeatherPrediction
+IBRUN: Command is /home/lrnowac/linearRegression/linearregression/WeatherPrediction
+IBRUN: Even number of ranks per node (2)--hacking nodefile...
+IBRUN: Running on 2 unique nodes
+IBRUN: Will place 2 ranks on comet-11-03 with 12 threads each
+IBRUN: Will place 2 ranks on comet-11-04 with 12 threads each
+IBRUN: Nodefile is /tmp/7gRiui9bUi
+IBRUN: MPI binding policy: scatter/socket for 12 threads per rank (12 cores per socket)
+IBRUN: Adding MV2_USE_OLD_BCAST=1 to the environment
+IBRUN: Adding MV2_CPU_BINDING_LEVEL=socket to the environment
+IBRUN: Adding MV2_ENABLE_AFFINITY=1 to the environment
+IBRUN: Adding MV2_DEFAULT_TIME_OUT=23 to the environment
+IBRUN: Adding MV2_CPU_BINDING_POLICY=scatter to the environment
+IBRUN: Adding MV2_USE_HUGEPAGES=0 to the environment
+IBRUN: Adding MV2_HOMOGENEOUS_CLUSTER=0 to the environment
+IBRUN: Adding MV2_USE_UD_HYBRID=0 to the environment
+IBRUN: Added 8 new environment variables to the execution environment
+IBRUN: Command string is [mpirun_rsh -np 4 -hostfile /tmp/7gRiui9bUi -export-all /home/lrnowac/linearRegression/linearregression/WeatherPrediction 1]
+/home/lrnowac/linearRegression/linearregression/WeatherPrediction: error while loading shared libraries: libmpi.so.40: cannot open shared object file: No such file or directory
+/home/lrnowac/linearRegression/linearregression/WeatherPrediction: error while loading shared libraries: libmpi.so.40: cannot open shared object file: No such file or directory
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 3, pid: 26864) exited with status 127
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 2, pid: 26863) exited with status 127
+Timeout during client startup.
+*** glibc detected *** mpirun_rsh: free(): invalid pointer: 0x0000000000f50f00 ***
+======= Backtrace: =========
+/lib64/libc.so.6[0x3f5ee75e5e]
+/lib64/libc.so.6[0x3f5ee78cad]
+mpirun_rsh(free_memory+0x4a)[0x40989a]
+mpirun_rsh(main+0x69c)[0x405cfc]
+/lib64/libc.so.6(__libc_start_main+0x100)[0x3f5ee1ed20]
+mpirun_rsh[0x405519]
+======= Memory map: ========
+00400000-00426000 r-xp 00000000 09:01 2515664                            /opt/mvapich2/intel/ib/bin/mpirun_rsh
+00626000-00628000 rw-p 00026000 09:01 2515664                            /opt/mvapich2/intel/ib/bin/mpirun_rsh
+00628000-0062d000 rw-p 00000000 00:00 0 
+00f4b000-00f6c000 rw-p 00000000 00:00 0                                  [heap]
+3f5ea00000-3f5ea20000 r-xp 00000000 09:01 1179711                        /lib64/ld-2.12.so
+3f5ec20000-3f5ec21000 r--p 00020000 09:01 1179711                        /lib64/ld-2.12.so
+3f5ec21000-3f5ec22000 rw-p 00021000 09:01 1179711                        /lib64/ld-2.12.so
+3f5ec22000-3f5ec23000 rw-p 00000000 00:00 0 
+3f5ee00000-3f5ef8b000 r-xp 00000000 09:01 1179771                        /lib64/libc-2.12.so
+3f5ef8b000-3f5f18a000 ---p 0018b000 09:01 1179771                        /lib64/libc-2.12.so
+3f5f18a000-3f5f18e000 r--p 0018a000 09:01 1179771                        /lib64/libc-2.12.so
+3f5f18e000-3f5f190000 rw-p 0018e000 09:01 1179771                        /lib64/libc-2.12.so
+3f5f190000-3f5f194000 rw-p 00000000 00:00 0 
+3f5f200000-3f5f283000 r-xp 00000000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f283000-3f5f482000 ---p 00083000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f482000-3f5f483000 r--p 00082000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f483000-3f5f484000 rw-p 00083000 09:01 1179824                        /lib64/libm-2.12.so
+3f5f600000-3f5f617000 r-xp 00000000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f617000-3f5f817000 ---p 00017000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f817000-3f5f818000 r--p 00017000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f818000-3f5f819000 rw-p 00018000 09:01 1179773                        /lib64/libpthread-2.12.so
+3f5f819000-3f5f81d000 rw-p 00000000 00:00 0 
+3f5fa00000-3f5fa02000 r-xp 00000000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fa02000-3f5fc02000 ---p 00002000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fc02000-3f5fc03000 r--p 00002000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fc03000-3f5fc04000 rw-p 00003000 09:01 1179864                        /lib64/libdl-2.12.so
+3f5fe00000-3f5fe16000 r-xp 00000000 09:01 2887299                        /usr/lib64/librdmacm.so.1.0.0
+3f5fe16000-3f60016000 ---p 00016000 09:01 2887299                        /usr/lib64/librdmacm.so.1.0.0
+3f60016000-3f60017000 rw-p 00016000 09:01 2887299                        /usr/lib64/librdmacm.so.1.0.0
+3f60017000-3f60018000 rw-p 00000000 00:00 0 
+3f60200000-3f60214000 r-xp 00000000 09:01 2905888                        /usr/lib64/libibmad.so.5.5.0
+3f60214000-3f60414000 ---p 00014000 09:01 2905888                        /usr/lib64/libibmad.so.5.5.0
+3f60414000-3f6041e000 rw-p 00014000 09:01 2905888                        /usr/lib64/libibmad.so.5.5.0
+3f60600000-3f60608000 r-xp 00000000 09:01 2896280                        /usr/lib64/libibumad.so.3.1.0
+3f60608000-3f60807000 ---p 00008000 09:01 2896280                        /usr/lib64/libibumad.so.3.1.0
+3f60807000-3f60808000 rw-p 00007000 09:01 2896280                        /usr/lib64/libibumad.so.3.1.0
+3f61e00000-3f61e4d000 r-xp 00000000 09:01 1180543                        /lib64/libnl.so.1.1.4
+3f61e4d000-3f6204c000 ---p 0004d000 09:01 1180543                        /lib64/libnl.so.1.1.4
+3f6204c000-3f62052000 rw-p 0004c000 09:01 1180543                        /lib64/libnl.so.1.1.4
+2b767e400000-2b767e401000 rw-p 00000000 00:00 0 
+2b767e41b000-2b767e41d000 rw-p 00000000 00:00 0 
+2b767e41d000-2b767e434000 r-xp 00000000 09:01 2915571                    /usr/lib64/libibverbs.so.1.0.0
+2b767e434000-2b767e633000 ---p 00017000 09:01 2915571                    /usr/lib64/libibverbs.so.1.0.0
+2b767e633000-2b767e634000 rw-p 00016000 09:01 2915571                    /usr/lib64/libibverbs.so.1.0.0
+2b767e634000-2b767e63b000 r-xp 00000000 09:01 1179783                    /lib64/librt-2.12.so
+2b767e63b000-2b767e83a000 ---p 00007000 09:01 1179783                    /lib64/librt-2.12.so
+2b767e83a000-2b767e83b000 r--p 00006000 09:01 1179783                    /lib64/librt-2.12.so
+2b767e83b000-2b767e83c000 rw-p 00007000 09:01 1179783                    /lib64/librt-2.12.so
+2b767e83c000-2b767e83d000 rw-p 00000000 00:00 0 
+2b767e83d000-2b767e83e000 r-xp 00000000 09:01 2515704                    /opt/mvapich2/intel/ib/lib/liblimic2.so.0.0.0
+2b767e83e000-2b767ea3d000 ---p 00001000 09:01 2515704                    /opt/mvapich2/intel/ib/lib/liblimic2.so.0.0.0
+2b767ea3d000-2b767ea3e000 rw-p 00000000 09:01 2515704                    /opt/mvapich2/intel/ib/lib/liblimic2.so.0.0.0
+2b767ea3e000-2b767ea54000 r-xp 00000000 09:01 2364455                    /opt/gnu/gcc/lib64/libgcc_s.so.1
+2b767ea54000-2b767ec53000 ---p 00016000 09:01 2364455                    /opt/gnu/gcc/lib64/libgcc_s.so.1
+2b767ec53000-2b767ec54000 rw-p 00015000 09:01 2364455                    /opt/gnu/gcc/lib64/libgcc_s.so.1
+2b767ec54000-2b767ec56000 rw-p 00000000 00:00 0 
+2b767ec56000-2b767eed7000 r-xp 00000000 09:01 3810638                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libimf.so
+2b767eed7000-2b767f0d6000 ---p 00281000 09:01 3810638                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libimf.so
+2b767f0d6000-2b767f119000 rw-p 00280000 09:01 3810638                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libimf.so
+2b767f119000-2b767fadd000 r-xp 00000000 09:01 3810650                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libsvml.so
+2b767fadd000-2b767fcdd000 ---p 009c4000 09:01 3810650                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libsvml.so
+2b767fcdd000-2b767fd14000 rw-p 009c4000 09:01 3810650                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libsvml.so
+2b767fd14000-2b767fd19000 r-xp 00000000 09:01 3810644                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libirng.so
+2b767fd19000-2b767ff19000 ---p 00005000 09:01 3810644                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libirng.so
+2b767ff19000-2b767ff1b000 rw-p 00005000 09:01 3810644                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libirng.so
+2b767ff1b000-2b767ff1c000 rw-p 00000000 00:00 0 
+2b767ff1c000-2b767ff6e000 r-xp 00000000 09:01 3810640                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libintlc.so.5
+2b767ff6e000-2b768016e000 ---p 00052000 09:01 3810640                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libintlc.so.5
+2b768016e000-2b7680171000 rw-p 00052000 09:01 3810640                    /opt/intel/composer_xe_2013_sp1.2.144/compiler/lib/intel64/libintlc.so.5
+2b7680171000-2b7680175000 rw-p 00000000 00:00 0 
+2b7680175000-2b7680176000 ---p 00000000 00:00 0 
+2b7680176000-2b7680376000 rw-p 00000000 00:00 0 
+2b7680390000-2b768039d000 r-xp 00000000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2b768039d000-2b768059c000 ---p 0000d000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2b768059c000-2b768059d000 r--p 0000c000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2b768059d000-2b768059e000 rw-p 0000d000 09:01 1179831                    /lib64/libnss_files-2.12.so
+2b768059e000-2b768059f000 ---p 00000000 00:00 0 
+2b768059f000-2b76807a0000 rw-p 00000000 00:00 0 
+7ffeb39cb000-7ffeb39e2000 rw-p 00000000 00:00 0                          [stack]
+7ffeb39eb000-7ffeb39ec000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+[comet-11-03.sdsc.edu:mpirun_rsh][error_sighandler] Caught error: Aborted (signal 6)
+read: Connection reset by peer
+Error writing receiving environ!
+IBRUN: Job died with signal 6, without core dump
+IBRUN: Command is ./WeatherPrediction
+IBRUN: Command is /home/lrnowac/linearRegression/linearregression/WeatherPrediction
+IBRUN: Even number of ranks per node (4)--hacking nodefile...
+IBRUN: Running on 2 unique nodes
+IBRUN: Will place 4 ranks on comet-11-03 with 6 threads each
+IBRUN: Will place 4 ranks on comet-11-04 with 6 threads each
+IBRUN: Nodefile is /tmp/6dPaKXNz0n
+IBRUN: MPI binding policy: illogical/arbitrary for 6 threads per rank (12 cores per socket)
+IBRUN: Adding MV2_CPU_MAPPING=0-5:6-11:12-17:18-23 to the environment
+IBRUN: Adding MV2_USE_OLD_BCAST=1 to the environment
+IBRUN: Adding MV2_USE_HUGEPAGES=0 to the environment
+IBRUN: Adding MV2_HOMOGENEOUS_CLUSTER=0 to the environment
+IBRUN: Adding MV2_ENABLE_AFFINITY=1 to the environment
+IBRUN: Adding MV2_DEFAULT_TIME_OUT=23 to the environment
+IBRUN: Adding MV2_USE_UD_HYBRID=0 to the environment
+IBRUN: Added 7 new environment variables to the execution environment
+IBRUN: Command string is [mpirun_rsh -np 8 -hostfile /tmp/6dPaKXNz0n -export-all /home/lrnowac/linearRegression/linearregression/WeatherPrediction 1]
+/home/lrnowac/linearRegression/linearregression/WeatherPrediction: error while loading shared libraries: libmpi.so.40: cannot open shared object file: No such file or directory
+/home/lrnowac/linearRegression/linearregression/WeatherPrediction: error while loading shared libraries: libmpi.so.40: cannot open shared object file: No such file or directory
+/home/lrnowac/linearRegression/linearregression/WeatherPrediction: error while loading shared libraries: libmpi.so.40: cannot open shared object file: No such file or directory
+/home/lrnowac/linearRegression/linearregression/WeatherPrediction: error while loading shared libraries: libmpi.so.40: cannot open shared object file: No such file or directory
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 4, pid: 26967) exited with status 127
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 6, pid: 26969) exited with status 127
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 5, pid: 26968) exited with status 127
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 7, pid: 26970) exited with status 127
+Timeout during client startup.
+read: Connection reset by peer
+Error writing receiving environ!
+IBRUN: Job ended with value 1
+IBRUN: Command is ./WeatherPrediction
+IBRUN: Command is /home/lrnowac/linearRegression/linearregression/WeatherPrediction
+IBRUN: Even number of ranks per node (8)--hacking nodefile...
+IBRUN: Running on 2 unique nodes
+IBRUN: Will place 8 ranks on comet-11-03 with 3 threads each
+IBRUN: Will place 8 ranks on comet-11-04 with 3 threads each
+IBRUN: Nodefile is /tmp/ST58B6FhxB
+IBRUN: MPI binding policy: illogical/arbitrary for 3 threads per rank (12 cores per socket)
+IBRUN: Adding MV2_CPU_MAPPING=0-2:3-5:6-8:9-11:12-14:15-17:18-20:21-23 to the environment
+IBRUN: Adding MV2_USE_OLD_BCAST=1 to the environment
+IBRUN: Adding MV2_USE_HUGEPAGES=0 to the environment
+IBRUN: Adding MV2_HOMOGENEOUS_CLUSTER=0 to the environment
+IBRUN: Adding MV2_ENABLE_AFFINITY=1 to the environment
+IBRUN: Adding MV2_DEFAULT_TIME_OUT=23 to the environment
+IBRUN: Adding MV2_USE_UD_HYBRID=0 to the environment
+IBRUN: Added 7 new environment variables to the execution environment
+IBRUN: Command string is [mpirun_rsh -np 16 -hostfile /tmp/ST58B6FhxB -export-all /home/lrnowac/linearRegression/linearregression/WeatherPrediction 1]
+[cli_15]: [cli_14]: [cli_12]: [cli_13]: aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1260d40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1c5bd40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1161d40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x20abd40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+[cli_8]: [cli_9]: [cli_10]: aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x102ad40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x19a7d40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1809d40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+[cli_11]: aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1bc9d40, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+[comet-11-04.sdsc.edu:mpispawn_1][readline] Unexpected End-Of-File on file descriptor 12. MPI process died?
+[comet-11-04.sdsc.edu:mpispawn_1][mtpmi_processops] Error while reading PMI socket. MPI process died?
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 12, pid: 27062) exited with status 1
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 11, pid: 27061) exited with status 1
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 13, pid: 27063) exited with status 1
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 10, pid: 27060) exited with status 1
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 14, pid: 27064) exited with status 1
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 8, pid: 27058) exited with status 1
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 9, pid: 27059) exited with status 1
+[comet-11-04.sdsc.edu:mpispawn_1][child_handler] MPI process (rank: 15, pid: 27065) exited with status 1
+[cli_5]: [cli_7]: [cli_4]: [cli_6]: aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x21a0460, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0xd4b460, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1ef7460, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1f6f460, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+[cli_1]: [cli_2]: [cli_3]: aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x1c92460, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x2632460, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+aborting job:
+Fatal error in MPI_Recv:
+Invalid argument, error stack:
+MPI_Recv(187): MPI_Recv(buf=0x22cc460, count=16, MPI_CHAR, src=0, tag=0, MPI_COMM_WORLD, status=(nil)) failed
+MPI_Recv(88).: Null pointer in parameter status
+
+[comet-11-03.sdsc.edu:mpispawn_0][readline] Unexpected End-Of-File on file descriptor 12. MPI process died?
+[comet-11-03.sdsc.edu:mpispawn_0][mtpmi_processops] Error while reading PMI socket. MPI process died?
+[comet-11-03.sdsc.edu:mpispawn_0][child_handler] MPI process (rank: 6, pid: 29915) exited with status 1
+[comet-11-03.sdsc.edu:mpispawn_0][child_handler] MPI process (rank: 7, pid: 29916) exited with status 1
+[comet-11-03.sdsc.edu:mpispawn_0][child_handler] MPI process (rank: 1, pid: 29910) exited with status 1
+[comet-11-03.sdsc.edu:mpispawn_0][child_handler] MPI process (rank: 2, pid: 29911) exited with status 1
+[comet-11-03.sdsc.edu:mpispawn_0][child_handler] MPI process (rank: 3, pid: 29912) exited with status 1
+[comet-11-03.sdsc.edu:mpispawn_0][child_handler] MPI process (rank: 4, pid: 29913) exited with status 1
+[comet-11-03.sdsc.edu:mpispawn_0][child_handler] MPI process (rank: 5, pid: 29914) exited with status 1
+IBRUN: Job ended with value 1
+Connection to comet-11-04 closed by remote host.
+Connection to comet-11-03 closed by remote host.

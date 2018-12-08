@@ -172,12 +172,12 @@ int main(int argc, char* argv[])
             local_csv_files[i] = malloc(sizeof(char) * 16);
 
             // Receive filename
-            MPI_Recv(&local_csv_files[i], 16, MPI_CHAR, 0, 0, MPI_COMM_WORLD, NULL);
+            MPI_Recv(&local_csv_files[i], 16, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             //printf("Process %d received filename \"%s\" for index %d\n", rank, local_csv_files[i], i);
             //fflush(stdout);
 
             // Receive file size
-            MPI_Recv(&local_csv_lines[i], 1, MPI_INT, 0, 0, MPI_COMM_WORLD, NULL);
+            MPI_Recv(&local_csv_lines[i], 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             //printf("Process %d received file length %d for index %d\n", rank, local_csv_lines[i], i);
             //fflush(stdout);
         }
@@ -468,7 +468,14 @@ int main(int argc, char* argv[])
         //printf("End time taken:%f\n", endtime - midtime);
         //printf("P=%d\tT=%s\n",num_processes,argv[1]);
         //printf("Total time taken:%f\n\n\n", endtime - starttime);
-        int input;
+        int input=0;
+        //int i;
+        //for (i=0;i<=365;i++)
+        //{
+        //    double p=predictTemp(c,i);
+        //    printf("%d,%.2f\n",i,p);
+        //}
+
         scanf("%d",&input);
         while(input!=-1)
         {
