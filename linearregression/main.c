@@ -3,7 +3,7 @@
 #include <math.h>
 #include <mpi.h>
 #include <omp.h>
-#include "polyfit.h"
+#include "polynomialBestFit.h"
 #include "retrievedata.h"
 #include "data.h"
 
@@ -441,7 +441,15 @@ int main(int argc, char* argv[])
         //{
         //    printf("%f,%f\n",t_x[i],t_y[i]);
         //}
+
+
+        //double xx[]={1,2,3,4,5};
+        //double yy[]={6,7,8,9,10};
+        //double *dummy_x=xx;
+        //double *dummy_y=yy;
+
         int result = polyfit(t_x, t_y, output_array_size, ORDER, c);
+        //int result = polyfit(dummy_x, dummy_y, 5, ORDER, c);
 
         if (result == -1)
         {
@@ -449,7 +457,7 @@ int main(int argc, char* argv[])
             printf("%ld",sizeof(c)/sizeof(*c));
             return EXIT_FAILURE;
         }
-        printf("\n");
+
         print_equation(c);
 
         // args - coefficients array and the X value it will use
@@ -495,6 +503,7 @@ double predictTemp(long double *coefficients,double x_point)
 // Prints out the polynomial in human readable form
 void print_equation(long double *coefficients)
 {
+    printf("Equation for best fit line, to the nth degree\nn = %d\n",ORDER);
     for (int i=0;i<ORDER+1;i++)
     {
         if (i!=ORDER)
