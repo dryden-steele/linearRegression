@@ -14,7 +14,7 @@
 
 // Order of polynomial; ie. highest degree of x
 // Will probably tweak this somehow to get more accurate without destrying our efficency
-const int ORDER=10;
+const int ORDER=100;
 const int CSV_NUM=40;
 const int days_in_month[]={31,59,90,120,151,181,212,243,273,303,333};
 // Prototype declarations boi
@@ -436,11 +436,11 @@ int main(int argc, char* argv[])
         // return -1 -> no good
 
         //double midtime = MPI_Wtime();
-
-        for (int i=0;i<output_array_size;++i)
-        {
-            printf("%f,%f\n",t_x[i],t_y[i]);
-        }
+        
+        //for (int i=0;i<output_array_size;++i) //prints all the data points 
+        //{
+        //    printf("%f,%f\n",t_x[i],t_y[i]);
+        //}
         int result = polyfit(t_x, t_y, output_array_size, ORDER, c);
 
         if (result == -1)
@@ -465,7 +465,7 @@ int main(int argc, char* argv[])
         while(input!=-1)
         {
             double prediction = predictTemp(c,input); 
-            printf("Prediction: %f degrees Celsius\n",prediction); 
+            printf("Average:\t%.2fC / %.2fF\n",prediction,prediction*1.8+32); 
             fflush(stdout);
             scanf("%d",&input);
         }
