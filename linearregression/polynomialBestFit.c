@@ -9,12 +9,10 @@ int polyfit(const double* const dependentValues,
             long double* coefficients)
 {
     // Declarations
-    long double B[MAX_ORDER+1] = {0.0f}; //original column vector array
-    long double P[((MAX_ORDER+1) * 2)+1] = {0.0f}; //power of X array
-    long double A[(MAX_ORDER + 1)*2*(MAX_ORDER + 1)] = {0.0f}; //reduction matrix
-
+    long double B[MAX_ORDER+1] = {0}; //original column vector array
+    long double P[((MAX_ORDER+1) * 2)+1] = {0}; //power of X array
+    long double A[(MAX_ORDER + 1)*2*(MAX_ORDER + 1)] = {0}; //reduction matrix
     long double x, y, powx;
-
     unsigned int ii, jj, kk;
 
     // Needs to be more elements than order
@@ -46,7 +44,7 @@ int polyfit(const double* const dependentValues,
     // Compute the sum of the Powers of X
     for (ii = 0; ii < countOfElements; ii++)
     {
-        x    = dependentValues[ii];
+        x = dependentValues[ii];
         powx = dependentValues[ii];
 
         for (jj = 1; jj < ((2 * (order + 1)) + 1); jj++)
