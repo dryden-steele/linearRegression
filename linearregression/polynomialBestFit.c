@@ -3,17 +3,14 @@
 // Max order of polynomial, will be used to find a balance between accuracy and
 // efficency
 enum { MAX_ORDER = 100 };
-int polyfit(const double* const dependentValues,
+int polynomialBestFit(const double* const dependentValues,
             const double* const independentValues, unsigned int countOfElements,
             unsigned int order, long double* coefficients) {
     // Declarations
-    long double B[MAX_ORDER + 1] = {0.0f};  // original column vector array
-    long double P[((MAX_ORDER + 1) * 2) + 1] = {0.0f};  // power of X array
-    long double A[(MAX_ORDER + 1) * 2 * (MAX_ORDER + 1)] = {
-        0.0f};  // reduction matrix
-
+    long double B[MAX_ORDER + 1] = {0};  // original column vector array
+    long double P[((MAX_ORDER + 1) * 2) + 1] = {0};  // power of X array
+    long double A[(MAX_ORDER + 1) * 2 * (MAX_ORDER + 1)] = {0};  // reduction matrix
     long double x, y, powx;
-
     unsigned int ii, jj, kk;
 
     // Needs to be more elements than order
